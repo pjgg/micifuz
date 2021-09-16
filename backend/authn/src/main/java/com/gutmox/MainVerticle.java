@@ -1,17 +1,14 @@
 package com.gutmox;
 
 import com.gutmox.ioc.IoC;
-import com.gutmox.router.Routing;
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.ext.web.Router;
-import io.vertx.reactivex.ext.web.RoutingContext;
-import io.vertx.reactivex.ext.web.handler.BodyHandler;
+
 import java.util.Arrays;
 
 public class MainVerticle extends AbstractVerticle {

@@ -1,7 +1,5 @@
 package com.gutmox.router;
 
-import com.gutmox.handlers.HealthHandler;
-import com.gutmox.handlers.HelloHandler;
 import com.gutmox.ioc.IoC;
 import io.reactivex.Single;
 import io.vertx.reactivex.core.Vertx;
