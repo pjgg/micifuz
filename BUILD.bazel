@@ -1,11 +1,3 @@
-load("@io_bazel_rules_docker//java:image.bzl", "java_image")
-load(
-    "@io_bazel_rules_docker//container:container.bzl",
-    "container_image",
-    "container_pull",
-    "container_push",
-)
-
 java_library(
     name = "all-external-targets",
     srcs = glob(["**/src/main/java/**/*.java"]),
@@ -25,7 +17,6 @@ java_library(
         "@maven//:org_glassfish_jaxb_jaxb_runtime",
     ],
 )
-
 
 java_library(
     name = "units-tests-deps",
@@ -69,21 +60,4 @@ java_binary(
     deploy_manifest_lines = ["Main-Verticle: com.gutmox.MainVerticle"],
     visibility = ["//visibility:public"],
     runtime_deps = [":all-external-targets"],
-)
-
-container_image(
-    name = "container",
-    base = "@openjdk//image",
-    cmd = [
-        "java",
-        "-jar",
-        "service_deploy.jar",
-    ],
-    env = {
-        "TZ": "Europe/Madrid",
-        "VERTX_CONFIG_PATH": "/config.yaml",
-    },
-    files = [
-        ":service_deploy.jar",
-    ],
 )
