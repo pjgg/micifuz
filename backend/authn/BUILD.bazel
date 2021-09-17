@@ -28,6 +28,7 @@ java_library(
         "@maven//:io_vertx_vertx_rx_java2",
         "@maven//:io_reactivex_rxjava2_rxjava",
         "@maven//:io_vertx_vertx_core",
+         "@maven_test//:io_rest_assured_rest_assured",
         "@maven_test//:org_assertj_assertj_core",
         "@maven_test//:io_vertx_vertx_junit5",
         "@maven_test//:org_junit_jupiter_junit_jupiter_api",
@@ -56,8 +57,8 @@ java_test(
 java_binary(
     name = "service",
     main_class = "io.vertx.core.Launcher",
-    args = ["run com.gutmox.MainVerticle"],
-    deploy_manifest_lines = ["Main-Verticle: com.gutmox.MainVerticle"],
+    args = ["run com.micifuz.authn.MainVerticle"],
+    deploy_manifest_lines = ["Main-Verticle: com.micifuz.authn.MainVerticle"],
     visibility = ["//visibility:public"],
     runtime_deps = [":all-external-targets"],
 )

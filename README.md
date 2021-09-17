@@ -16,7 +16,7 @@ bazel test :tests
 
 ## Running from an IDE
 
-Simply run `com.gutmox.Main`  
+Simply run `Main`  
 
 ### Building docker container
 

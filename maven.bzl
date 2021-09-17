@@ -33,6 +33,7 @@ def maven():
 		    "org.apache.httpcomponents:httpclient:4.5.7",
 		    "org.mockito:mockito-junit-jupiter:2.23.0",
 		    "org.mockito:mockito-core:2.23.0",
+            "io.rest-assured:rest-assured:3.3.0"
 	    ],
 	    repositories = [
 		    "https://repo1.maven.org/maven2",
