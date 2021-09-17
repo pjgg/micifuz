@@ -14,14 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class SimpleTest {
 
     static String deploymentId;
+    static Vertx vertx = Vertx.vertx();
 
     @BeforeAll
-    public static void beforeAll(Vertx vertx) {
-        deploymentId = Main.start(vertx).blockingGet();
+    public static void beforeAll() {
+        vertx = Vertx.vertx();
+        deploymentId = Main.start(vertx, new DeploymentOptions()).blockingGet();
     }
 
     @AfterAll
-    public static void afterAll(Vertx vertx) {
+    public static void afterAll() {
         vertx.undeploy(deploymentId);
     }
 

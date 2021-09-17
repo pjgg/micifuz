@@ -15,8 +15,10 @@ java_library(
 
 java_library(
     name = "tests-deps",
+    srcs = glob(["**/src/test/java/**/*.java"]),
+    resources = glob(["**/src/test/resources/**"]),
     visibility = ["//visibility:public"],
-    runtime_deps = [
+    deps = [
         ":deps",
         "@vertx//:io_vertx_vertx_rx_java2",
         "@vertx//:io_reactivex_rxjava2_rxjava",
