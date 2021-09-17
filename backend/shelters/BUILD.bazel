@@ -15,20 +15,19 @@ java_library(
 
 java_library(
     name = "tests-deps",
-    srcs = glob(["**/src/test/java/**/*.java"]),
-    resources = glob(["**/src/test/resources/**"]),
     visibility = ["//visibility:public"],
-    deps = [
+    runtime_deps = [
         ":deps",
         "@vertx//:io_vertx_vertx_rx_java2",
         "@vertx//:io_reactivex_rxjava2_rxjava",
         "@vertx//:io_vertx_vertx_core",
-        "@vertx_test//:org_assertj_assertj_core",
-        "@vertx_test//:io_vertx_vertx_junit5",
-        "@vertx_test//:org_junit_jupiter_junit_jupiter_api",
-        "@vertx_test//:org_junit_jupiter_junit_jupiter_engine",
-        "@vertx_test//:org_junit_platform_junit_platform_console",
-        "@vertx_test//:org_apache_httpcomponents_httpclient",
+        "@vertx_tests//:org_assertj_assertj_core",
+        "@vertx_tests//:io_vertx_vertx_junit5",
+        "@vertx_tests//:org_junit_jupiter_junit_jupiter_api",
+        "@vertx_tests//:org_junit_jupiter_junit_jupiter_engine",
+        "@vertx_tests//:org_junit_platform_junit_platform_console",
+        "@vertx_tests//:org_apache_httpcomponents_httpclient",
+        "@vertx_tests//:io_rest_assured_rest_assured",
         "@mockito//:org_mockito_mockito_junit_jupiter",
         "@mockito//:org_mockito_mockito_core",
     ],
@@ -39,7 +38,7 @@ java_test(
     srcs = glob([
         "*.java",
     ]),
-    args = ["--select-package=com.gutmox"],
+    args = ["--select-package=com.micifuz"],
     main_class = "org.junit.platform.console.ConsoleLauncher",
     use_testrunner = False,
     visibility = ["//visibility:public"],
@@ -50,9 +49,9 @@ java_test(
 
 java_binary(
     name = "service",
-    main_class = "io.vertx.core.Launcher",
-    args = ["run com.micifuz.shelters.MainVerticle"],
-    deploy_manifest_lines = ["Main-Verticle: com.micifuz.shelters.MainVerticle"],
+    main_class = "com.micifuz.petshop.Main",
     visibility = ["//visibility:public"],
-    runtime_deps = [":deps"],
+    runtime_deps = [
+        ":deps",
+    ],
 )

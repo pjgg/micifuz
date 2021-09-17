@@ -1,37 +1,35 @@
-# vertx-structured-boost
+# Micifuz
 
-vertx simple boost with some structure 
+## Bazel
 
-## Building and running using Bazel
+### Bazel build
 
+#### Building the entire workspace:
 ```
-bazel run :service
-```
-
-## Passing unit tests using Bazel
-
-```
-bazel test :tests
-```  
-
-## Running from an IDE
-
-Simply run `Main`  
-
-### Building docker container
-
-```
-bazel build :container
-```
-#### Publishing docker image
-
-```
-bazel run :container
+bazel build //...
 ```
 
-### Generating fat jar
+#### Building 1 service:
+```
+bazel build //backend/authn/...
+```
+
+### Bazel test
+
+#### Testing the entire workspace:
+```
+bazel test //...
+```
+
+#### Testing 1 service:
+```
+bazel test //backend/authn/...
+```
+
+### Bazel running services
 
 ```
-bazel build :run_deploy.jar
+bazel run //backend/authn:service
 ```
+
 

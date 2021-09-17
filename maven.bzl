@@ -1,20 +1,26 @@
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
+## RUNTIME
+VERTX_VERSION="4.1.3"
+NETTY_TRANSPORT_VERSION="4.1.68.Final"
+## TESTING
+ASSERTJ_VERSION="3.20.2"
+JUNIT_VERSION="5.8.0"
+JUNIT_PLATFORM_VERSION="1.8.0"
+HTTP_CLIENT_VERSION="4.5.13"
+REST_ASSURE_VERSION="4.4.0"
+MOCKITO_VERSION="3.12.4"
+
 def maven():
     maven_install(
         name = "vertx",
         artifacts = [
-            "io.vertx:vertx-web:3.9.1",
-            "io.vertx:vertx-web-client:3.9.1",
-            "io.vertx:vertx-core:3.9.1",
-            "io.vertx:vertx-rx-java2:3.9.1",
-            "io.vertx:vertx-rx-java2:3.9.1",
-            "io.netty:netty-transport:4.1.49.Final",
-            "javax.xml.soap:javax.xml.soap-api:1.4.0",
-            "javax.xml.bind:jaxb-api:2.3.1",
-            "com.sun.xml.messaging.saaj:saaj-impl:1.5.1",
-            "javax.activation:activation:1.1",
-            "org.glassfish.jaxb:jaxb-runtime:2.3.0"
+            "io.vertx:vertx-web:%s" % VERTX_VERSION,
+            "io.vertx:vertx-web-client:%s" % VERTX_VERSION,
+            "io.vertx:vertx-core:%s" % VERTX_VERSION,
+            "io.vertx:vertx-rx-java2:%s" % VERTX_VERSION,
+            "io.vertx:vertx-rx-java2:%s" % VERTX_VERSION,
+            "io.netty:netty-transport:%s" % NETTY_TRANSPORT_VERSION,
         ],
         repositories = [
             "https://repo1.maven.org/maven2",
@@ -23,15 +29,15 @@ def maven():
     )
 
     maven_install(
-	    name = "vertx_test",
+	    name = "vertx_tests",
 	    artifacts = [
-		    "io.vertx:vertx-junit5:3.9.1",
-		    "org.assertj:assertj-core:3.16.1",
-		    "org.junit.jupiter:junit-jupiter-engine:5.6.2",
-		    "org.junit.jupiter:junit-jupiter-api:5.6.2",
-		    "org.junit.platform:junit-platform-console:1.5.2",
-		    "org.apache.httpcomponents:httpclient:4.5.7",
-            "io.rest-assured:rest-assured:3.3.0"
+		    "io.vertx:vertx-junit5:%s" % VERTX_VERSION,
+		    "org.assertj:assertj-core:%s" % ASSERTJ_VERSION,
+		    "org.junit.jupiter:junit-jupiter-engine:%s" % JUNIT_VERSION,
+		    "org.junit.jupiter:junit-jupiter-api:%s" % JUNIT_VERSION,
+		    "org.junit.platform:junit-platform-console:%s" % JUNIT_PLATFORM_VERSION,
+		    "org.apache.httpcomponents:httpclient:%s" % HTTP_CLIENT_VERSION,
+            "io.rest-assured:rest-assured:%s" % REST_ASSURE_VERSION,
 	    ],
 	    repositories = [
 		    "https://repo1.maven.org/maven2",
@@ -42,8 +48,8 @@ def maven():
     maven_install(
 	    name = "mockito",
 	    artifacts = [
-	        "org.mockito:mockito-junit-jupiter:2.23.0",
-            "org.mockito:mockito-core:2.23.0"
+	        "org.mockito:mockito-junit-jupiter:%s" % MOCKITO_VERSION,
+            "org.mockito:mockito-core:%s" % MOCKITO_VERSION,
 	    ],
 	    repositories = [
 		    "https://repo1.maven.org/maven2",
