@@ -10,12 +10,14 @@ JUNIT_PLATFORM_VERSION="1.8.0"
 HTTP_CLIENT_VERSION="4.5.13"
 REST_ASSURE_VERSION="4.4.0"
 MOCKITO_VERSION="3.12.4"
+HAMCREST_VERSION="1.3"
 
 def maven():
     maven_install(
         name = "vertx",
         artifacts = [
             "io.vertx:vertx-web:%s" % VERTX_VERSION,
+            "io.vertx:vertx-health-check:%s" % VERTX_VERSION,
             "io.vertx:vertx-web-client:%s" % VERTX_VERSION,
             "io.vertx:vertx-core:%s" % VERTX_VERSION,
             "io.vertx:vertx-rx-java2:%s" % VERTX_VERSION,
@@ -38,6 +40,7 @@ def maven():
 		    "org.junit.platform:junit-platform-console:%s" % JUNIT_PLATFORM_VERSION,
 		    "org.apache.httpcomponents:httpclient:%s" % HTTP_CLIENT_VERSION,
             "io.rest-assured:rest-assured:%s" % REST_ASSURE_VERSION,
+            "org.hamcrest:hamcrest-all:%s" % HAMCREST_VERSION
 	    ],
 	    repositories = [
 		    "https://repo1.maven.org/maven2",

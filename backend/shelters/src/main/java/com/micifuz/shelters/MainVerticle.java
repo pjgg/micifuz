@@ -4,8 +4,9 @@ import com.micifuz.shelters.ioc.IoC;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.ext.web.Router;
@@ -26,7 +27,7 @@ public class MainVerticle extends AbstractVerticle {
 
 		return IoC.getInstance().getRouting().createRouter().flatMap(this::startHttpServer)
 			.flatMapCompletable(httpServer -> {
-				LOGGER.info("HTTP server started on http://{0}:{1}", HOST, PORT.toString());
+				LOGGER.info(String.format("HTTP server started on http://%s:%d", HOST, PORT));
 				return Completable.complete();
 			});
 	}

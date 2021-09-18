@@ -1,14 +1,18 @@
 package com.micifuz.authn.ioc;
 
-import com.micifuz.authn.handlers.HealthHandler;
 import com.micifuz.authn.handlers.HelloHandler;
+import com.micifuz.authn.healthChecks.Procedures;
 import com.micifuz.authn.router.Routing;
+
+import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.ext.healthchecks.HealthCheckHandler;
 
 public class IoC {
 
     private final Routing routing;
     private final HelloHandler helloHandler;
-    private final HealthHandler healthCheck;
+    private final HealthCheckHandler healthCheckHandler;
+    private final Procedures healthCheckProcedures;
     private static com.micifuz.authn.ioc.IoC instance = null;
 
     public static synchronized com.micifuz.authn.ioc.IoC getInstance() {
@@ -20,7 +24,9 @@ public class IoC {
 
     public IoC() {
         routing = new Routing();
-        healthCheck = new HealthHandler();
+        Vertx vertx = Vertx.currentContext().owner();
+        healthCheckProcedures = new Procedures(vertx);
+        healthCheckHandler = healthCheckProcedures.getHealthCheckHandler();
         helloHandler = new HelloHandler();
     }
 
@@ -32,7 +38,7 @@ public class IoC {
         return helloHandler;
     }
 
-    public HealthHandler getHealthCheck() {
-        return healthCheck;
+    public HealthCheckHandler getHealthCheck() {
+        return healthCheckHandler;
     }
 }

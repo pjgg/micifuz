@@ -16,7 +16,7 @@ public class Routing {
         router.post().handler(BodyHandler.create());
         router.get(ROOT).handler(IoC.getInstance().getHelloHandler()::execute);
         router.get(HELLO).handler(IoC.getInstance().getHelloHandler()::execute);
-        router.get(HEALTH_CHECK).handler(IoC.getInstance().getHealthCheck()::execute);
+        router.get(HEALTH_CHECK).handler(IoC.getInstance().getHealthCheck());
         return Single.just(router);
     }
 }

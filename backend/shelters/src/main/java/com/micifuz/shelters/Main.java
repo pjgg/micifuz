@@ -1,12 +1,11 @@
 package com.micifuz.shelters;
 
-import com.micifuz.shelters.MainVerticle;
 import io.netty.channel.DefaultChannelId;
 import io.reactivex.Single;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.reactivex.core.Vertx;
 
 public class Main {
@@ -19,10 +18,10 @@ public class Main {
         deploymentOptions.setInstances(1);
         start(deploymentOptions)
                 .subscribe(res -> LOGGER.info("Verticle running with id " + res.toLowerCase()),
-                           error -> {
-                               error.printStackTrace();
-                               LOGGER.error("Error starting !!!!!!!! " + error.getMessage());
-                           });
+                        error -> {
+                            error.printStackTrace();
+                            LOGGER.error("Error starting !!!!!!!! " + error.getMessage());
+                        });
     }
 
     public static Single<String> start(DeploymentOptions deploymentOptions) {

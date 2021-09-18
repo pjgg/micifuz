@@ -5,3 +5,4 @@ bazel-testlogs
 .ijwb/.bazelproject
 .ijwb/.blaze/modules/.project-data-dir.iml
 .ijwb/.blaze/modules/.workspace.iml
+.ijwb/*
