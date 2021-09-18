@@ -18,9 +18,9 @@ public class Main {
         deploymentOptions.setInstances(1);
         start(deploymentOptions)
                 .subscribe(res -> LOGGER.info("Verticle running with id " + res.toLowerCase()),
-                        error -> {
-                            error.printStackTrace();
-                            LOGGER.error("Error starting !!!!!!!! " + error.getMessage());
+                        exception -> {
+                            exception.printStackTrace();
+                            LOGGER.error("Error starting !!!!!!!! " + exception.getMessage());
                         });
     }
 

@@ -12,7 +12,6 @@ public class IoC {
     private final Routing routing;
     private final HelloHandler helloHandler;
     private final HealthCheckHandler healthCheckHandler;
-    private final Procedures healthCheckProcedures;
     private static com.micifuz.authn.ioc.IoC instance = null;
 
     public static synchronized com.micifuz.authn.ioc.IoC getInstance() {
@@ -25,7 +24,7 @@ public class IoC {
     public IoC() {
         routing = new Routing();
         Vertx vertx = Vertx.currentContext().owner();
-        healthCheckProcedures = new Procedures(vertx);
+        Procedures healthCheckProcedures = new Procedures(vertx);
         healthCheckHandler = healthCheckProcedures.getHealthCheckHandler();
         helloHandler = new HelloHandler();
     }

@@ -12,12 +12,13 @@ import io.vertx.reactivex.ext.healthchecks.HealthCheckHandler;
 
 public class Procedures {
 
-    private Map<String, Handler<Promise<Status>>> healthChecks = new HashMap<>();
+    private static final String POSTGRESQL_NAME = "postgresql";
+    private final Map<String, Handler<Promise<Status>>> healthChecks = new HashMap<>();
     private final Vertx vertx;
 
     public Procedures(final Vertx vertx) {
         this.vertx = vertx;
-        healthChecks.put("postgresql", postgresql());
+        healthChecks.put(POSTGRESQL_NAME, postgresql());
     }
 
     public HealthCheckHandler getHealthCheckHandler() {
