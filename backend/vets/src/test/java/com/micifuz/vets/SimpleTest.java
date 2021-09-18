@@ -1,4 +1,4 @@
-package com.micifuz.authn;
+package com.micifuz.vets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,9 +21,8 @@ import io.vertx.junit5.VertxTestContext;
 
 @ExtendWith(VertxExtension.class)
 public class SimpleTest {
-
-    final static String AUTHN_HOST = "localhost";
-    final static int AUTHN_PORT = 8080;
+    final static String VETS_HOST = "localhost";
+    final static int VETS_PORT = 8083;
     static String deploymentId;
 
     @BeforeAll
@@ -39,11 +38,11 @@ public class SimpleTest {
     @Test
     void should_simplyWork() {
         RestAssured.given()
-                .port(AUTHN_PORT)
+                .port(VETS_PORT)
                 .when().get("/hello")
                 .then()
                 .statusCode(200)
-                .body("hello", is("world: authN"));
+                .body("hello", is("world: Vets"));
     }
 
     @Test
@@ -51,7 +50,7 @@ public class SimpleTest {
     void should_healthCheck_up(Vertx vertx, VertxTestContext testContext) {
         HttpClient client = vertx.createHttpClient();
 
-        client.request(HttpMethod.GET, AUTHN_PORT, AUTHN_HOST, "/health").compose(req -> req.send()
+        client.request(HttpMethod.GET, VETS_PORT, VETS_HOST, "/health").compose(req -> req.send()
                 .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
                     assertThat(httpResp.statusCode(), is(200));
                     testContext.completeNow();

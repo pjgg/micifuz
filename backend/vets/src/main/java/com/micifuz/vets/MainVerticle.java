@@ -16,7 +16,7 @@ public class MainVerticle extends AbstractVerticle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class.getName());
 	private final String HOST = "0.0.0.0";
-	private final Integer PORT = 8080;
+	private final Integer PORT = 8083;
 
 	@Override
 	public Completable rxStart() {

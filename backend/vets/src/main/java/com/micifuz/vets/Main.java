@@ -1,12 +1,12 @@
 package com.micifuz.vets;
 
 import io.netty.channel.DefaultChannelId;
-import io.reactivex.Single;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.reactivex.core.Vertx;
 
 public class Main {
 
@@ -17,14 +17,14 @@ public class Main {
         DeploymentOptions deploymentOptions = new DeploymentOptions();
         deploymentOptions.setInstances(1);
         start(deploymentOptions)
-                .subscribe(res -> LOGGER.info("Verticle running with id " + res.toLowerCase()),
-                        exception -> {
-                            exception.printStackTrace();
-                            LOGGER.error("Error starting !!!!!!!! " + exception.getMessage());
-                        });
+                .onSuccess(res -> LOGGER.info("Verticle running with id " + res.toLowerCase()))
+                .onFailure(exception -> {
+                    exception.printStackTrace();
+                    LOGGER.error("Error starting !!!!!!!! " + exception.getMessage());
+                });
     }
 
-    public static Single<String> start(DeploymentOptions deploymentOptions) {
+    public static Future<String> start(DeploymentOptions deploymentOptions) {
         DefaultChannelId.newInstance();
         VertxOptions vertxOptions = new VertxOptions();
         vertxOptions.setEventLoopPoolSize(5);
@@ -36,11 +36,11 @@ public class Main {
         });
     }
 
-    public static Single<String> start(Vertx vertx) {
+    public static Future<String> start(Vertx vertx) {
         return start(vertx, new DeploymentOptions());
     }
 
-    public static Single<String> start(Vertx vertx, DeploymentOptions deploymentOptions) {
-        return vertx.rxDeployVerticle(MainVerticle.class.getName(), deploymentOptions);
+    public static Future<String> start(Vertx vertx, DeploymentOptions deploymentOptions) {
+        return vertx.deployVerticle(MainVerticle.class.getName(), deploymentOptions);
     }
 }

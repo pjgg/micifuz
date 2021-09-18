@@ -12,11 +12,11 @@ public class IoC {
     private final Routing routing;
     private final HelloHandler helloHandler;
     private final HealthCheckHandler healthCheckHandler;
-    private static com.micifuz.authn.ioc.IoC instance = null;
+    private static IoC instance = null;
 
-    public static synchronized com.micifuz.authn.ioc.IoC getInstance() {
+    public static synchronized IoC getInstance() {
         if (instance == null) {
-            instance = new com.micifuz.authn.ioc.IoC();
+            instance = new IoC();
         }
         return instance;
     }
