@@ -11,6 +11,7 @@ HTTP_CLIENT_VERSION = "4.5.13"
 REST_ASSURE_VERSION = "4.4.0"
 MOCKITO_VERSION = "3.12.4"
 HAMCREST_VERSION = "1.3"
+COMMONS_LANGS3_VERSION = "3.12.0"
 
 def maven():
     maven_install(
@@ -25,6 +26,7 @@ def maven():
             "io.vertx:vertx-config:%s" % VERTX_VERSION,
             "io.vertx:vertx-config-yaml:%s" % VERTX_VERSION,
             "io.netty:netty-transport:%s" % NETTY_TRANSPORT_VERSION,
+            "org.apache.commons:commons-lang3:%s" % COMMONS_LANGS3_VERSION,
         ],
         repositories = [
             "https://repo1.maven.org/maven2",
