@@ -16,6 +16,7 @@ public class Runner {
     private static final Logger LOGGER = LoggerFactory.getLogger(Runner.class.getName());
 
     public static void main(String[] args) {
+        System.out.println("Starting >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         DeploymentOptions deploymentOptions = new DeploymentOptions();
         deploymentOptions.setInstances(1);
         start(deploymentOptions, args)
@@ -42,10 +43,6 @@ public class Runner {
 
     public static Stream<Future<String>> start(Vertx vertx, DeploymentOptions deploymentOptions, String[] verticles) {
         return Arrays.stream(verticles).map(verticle -> start(vertx, deploymentOptions, verticle));
-    }
-
-    public static Future<String> start(Vertx vertx, String verticle) {
-        return start(vertx, new DeploymentOptions(), verticle);
     }
 
     public static Future<String> start(Vertx vertx, DeploymentOptions deploymentOptions, String verticle) {

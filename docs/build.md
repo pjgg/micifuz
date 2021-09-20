@@ -27,3 +27,15 @@ bazel test //backend/authn/...
 ```
 bazel run //backend/authn:service
 ```
+
+### Building docker image
+
+```
+bazel run //backend/authn:container
+```
+
+### Generating fat jar (if needed)
+
+```
+bazel build //backend/authn:service_deploy.jar
+```

@@ -1,4 +1,5 @@
 load("@//bazel:deps.bzl", "COMMON_DEPS", "COMMON_TESTS_DEPS")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
 java_library(
     name = "deps",
@@ -21,12 +22,28 @@ java_test(
     ],
 )
 
+MAIN_VERTICLE = "com.micifuz.vets.VetsMainVerticle"
+
 java_binary(
     name = "service",
-    args = ["com.micifuz.vets.VetsMainVerticle"],
+    args = [MAIN_VERTICLE],
     main_class = "com.micifuz.commons.Runner",
     visibility = ["//visibility:public"],
     runtime_deps = [
         ":deps",
+    ],
+)
+
+container_image(
+    name = "container",
+    base = "@java11//image",
+    cmd = [
+        "java",
+        "-jar",
+        "service_deploy.jar",
+        MAIN_VERTICLE
+    ],
+    files = [
+        ":service_deploy.jar",
     ],
 )
