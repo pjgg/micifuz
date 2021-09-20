@@ -1,165 +1,23 @@
 # Micifuz
 
+Micifuz aims to be a showroom for vert.x projects. 
+
+## Code style
+
+Please, use [this code style format](./docs/micifuz-formats.xml)
+
 ## Bazel
 
 Please read carefully [this document](https://docs.bazel.build/versions/4.2.1/bazel-overview.html) in order to understand our motivations behind bazel
 
 ### Bazel installation
 
-Bazel it's supported on many platforms, but we only have tested in two:
-
-* Fedora/CentOS
-
-```bash
-dnf install dnf-plugins-core
-dnf copr enable vbatts/bazel
-dnf install bazel4
-```
-
-* macOS
-```bash
-brew install bazel
-```
-
-for other platform please check the [official documentation](https://docs.bazel.build/versions/main/install.html).
+Please, read [How Bazel is installed](./docs/instalation.md)
 
 ### Bazel build
 
-#### Building the entire workspace:
-```
-bazel build //...
-```
+Please, read [How to build the project with bazel](./docs/build.md)
 
-#### Building 1 service:
-```
-bazel build //backend/authn/...
-```
+## Continuous Integration 
 
-### Bazel test
-
-#### Testing the entire workspace:
-```
-bazel test //...
-```
-
-#### Testing 1 service:
-```
-bazel test //backend/authn/...
-```
-
-### Bazel running services
-
-```
-bazel run //backend/authn:service
-```
-## Continuous Integration
-
-Def: Continuous integration (CI) is the practice of automating the integration of code changes from multiple
-contributors into a single software project.
-
-Currently, we are using [GitHub Actions](https://docs.github.com/en/actions/guides/about-continuous-integration) as a
-continuous integration platform. Every pull request will trigger a job that
-will build and test the whole project. Thanks to bazel, only the piece of code that has changed will be recompiled and
-tested so each change shouldn't take too much effort. Also, the generated artifacts will be cached between builds thanks to
-GiHub actions caches.
-
-We have developed two workflows in order to check the integrity of the project:
-* daily.yml: is trigger once a day and will build and test the whole project. The main idea of this workflow is to check
-  the integrity in terms of "moving parts", at the end of the day a project has a lot of moving parts, there are too many components
-  that is pointing to `latest` versions of databases or third party components as the operating system that are running in docker,
-  so these moving parts could break your product, and you must be aware of all of these breaking changes as soon as possible.
-* ci.yml: is trigger per pull request, and will do the same job as `daily.yml`.
-  Let's analyze one of these jobs deeply:
-  ```
-    build-micifuz-modules:
-    name: Build Micifuz
-    
-    # Ubuntu-latest, this is one moving part!
-    # virtual environments: https://github.com/actions/virtual-environments 
-    
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [ 11 ]
-    steps:
-      
-      # Caches and restores the bazelisk download directory, the bazel build directory.
-
-      - name: Cache bazel
-        uses: actions/cache@v2.1.6
-        env:
-          cache-name: bazel-cache
-        with:
-          path: |
-            ~/.cache/bazelisk
-            ~/.cache/bazel
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref }}
-      
-      # Checks-out your repository under $GITHUB_WORKSPACE, which is the CWD for
-      # the rest of the steps
-      
-      - uses: actions/checkout@v2
-  
-      # We have developed our own script in order to release some disk space (around 20Gb)
-      # This is very valuable to us because we are going to need this space to run our test
-      # through dockercontainers (especially in a monorepo) 
-      
-      - name: Reclaim Disk Space
-        run: .github/ci-prerequisites.sh
-  
-      # Install Java {{ matrix.java }} (currently we are using Java 11). The matrix is defined above
-      # Adopt OpenJDK got moved to Eclipse Temurin, this is why is our JDK distributor
-      # you could check this JDK under website: https://adoptium.net/
-      # Again this is another moving part that could introduce breaking changes, because we are always
-      # running our builds agains the latest version of {{ matrix.java }}
-  
-      - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-          check-latest: true
-  
-      # Run our Bazel command, in this case we are going to build the whole project
-  
-      - name: Build the code
-        run: bazel build //...
-  ```
-
-Please have a look carefully at the code above, pay special attention to the comments. Maybe you will realize that we are not
-downloading Bazel or bazelisk ;)... yes that would be a very good question.
-
-My first step was `Cache bazel`, instead of "download bazelisk", this is because
-bazel and bazelisk are included in the provided virtual-environments [ubuntu-latest](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md)
-
-### dependabot.yml
-
-GitHub actions give you so many tools as a `dependabot` who will make you pull request with new releases of your dependencies
-For example,
-[Bump actions/cache from 2.1.4 to 2.1.6](https://github.com/bytesandmonkeys/micifuz/pull/8)
-
-By the time dependabot will become one of your best friends and competitors in terms of repository contributions.
-
-## Conventions
-
-### Testing Conventions
-
-### Runtime properties and test scenario custom configuration
-
-When we are testing is common to have scenarios that could be reproduced just under some configurations. This is why
-you can define your custom `config.yaml` through a `DeploymentOptions()` config.
-
-Example:
-
-Imagine that we have a `scenario_config.yaml` where the service properties are defined.
-
-```java
-        JsonObject scenarioConfig = new JsonObject()
-                .put("server.port", 8888)
-                .put("path", "scenario_config.yaml");
-
-        Main.start(vertx, new DeploymentOptions().setConfig(scenarioConfig)).result();
-```
-
-In the above example, your service will use `scenario_config.yaml` because is passed through a deploymentOptions under
-`path` key. Also, we are overwriting the property `server.port` with a runtime value. 
+Please, read [How Continuous Integration is configured](./docs/continuous-integration.md)
