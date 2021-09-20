@@ -1,58 +1,23 @@
+load("@//:deps.bzl", "COMMON_DEPS", "COMMON_TESTS_DEPS")
+
 java_library(
     name = "deps",
     srcs = glob(["**/src/main/java/**/*.java"]),
     resources = glob(["**/src/main/resources/**"]),
     visibility = ["//visibility:public"],
-    deps = [
-        "//backend/commons:deps",
-        "@vertx//:io_netty_netty_transport",
-        "@vertx//:io_reactivex_rxjava2_rxjava",
-        "@vertx//:io_vertx_vertx_config",
-        "@vertx//:io_vertx_vertx_config_yaml",
-        "@vertx//:io_vertx_vertx_core",
-        "@vertx//:io_vertx_vertx_health_check",
-        "@vertx//:io_vertx_vertx_rx_java2",
-        "@vertx//:io_vertx_vertx_web",
-        "@vertx//:io_vertx_vertx_web_client",
-        "@vertx//:org_apache_commons_commons_lang3",
-    ],
-)
-
-java_library(
-    name = "tests-deps",
-    srcs = glob(["**/src/test/java/**/*.java"]),
-    resources = glob(["**/src/test/resources/**"]),
-    visibility = ["//visibility:public"],
-    deps = [
-        "//backend/commons:deps",
-        ":deps",
-        "@mockito//:org_mockito_mockito_core",
-        "@mockito//:org_mockito_mockito_junit_jupiter",
-        "@vertx//:io_reactivex_rxjava2_rxjava",
-        "@vertx//:io_vertx_vertx_config",
-        "@vertx//:io_vertx_vertx_core",
-        "@vertx//:io_vertx_vertx_rx_java2",
-        "@vertx_tests//:io_rest_assured_rest_assured",
-        "@vertx_tests//:io_vertx_vertx_junit5",
-        "@vertx_tests//:org_apache_httpcomponents_httpclient",
-        "@vertx_tests//:org_assertj_assertj_core",
-        "@vertx_tests//:org_hamcrest_hamcrest_all",
-        "@vertx_tests//:org_junit_jupiter_junit_jupiter_api",
-        "@vertx_tests//:org_junit_platform_junit_platform_console",
-    ],
+    deps = COMMON_DEPS
 )
 
 java_test(
     name = "tests",
-    srcs = glob([
-        "*.java",
-    ]),
+    srcs = glob(["**/src/test/java/**/*.java"]),
     args = ["--select-package=com.micifuz"],
     main_class = "org.junit.platform.console.ConsoleLauncher",
+    resources = glob(["**/src/test/resources/**"]),
     use_testrunner = False,
     visibility = ["//visibility:public"],
-    runtime_deps = [
-        ":tests-deps",
+    deps = COMMON_DEPS + COMMON_TESTS_DEPS + [
+        ":deps",
     ],
 )
 

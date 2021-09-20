@@ -4,6 +4,7 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 VERTX_VERSION = "4.1.3"
 NETTY_TRANSPORT_VERSION = "4.1.68.Final"
 
+## TESTS
 ASSERTJ_VERSION = "3.20.2"
 JUNIT_VERSION = "5.7.0"
 JUNIT_PLATFORM_VERSION = "1.7.0"

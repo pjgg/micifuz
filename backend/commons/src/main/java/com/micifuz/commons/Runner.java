@@ -1,5 +1,8 @@
 package com.micifuz.commons;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import io.netty.channel.DefaultChannelId;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -7,9 +10,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class Runner {
 
@@ -20,23 +20,24 @@ public class Runner {
         deploymentOptions.setInstances(1);
         start(deploymentOptions, args)
                 .forEach(deployedVerticle ->
-                                 deployedVerticle.onSuccess(res -> LOGGER.info("Verticle running with id " + res.toLowerCase()))
-                                                 .onFailure(exception -> {
-                                                     exception.printStackTrace();
-                                                     LOGGER.error("Error starting !!!!!!!! " + exception.getMessage());
-                                                 }));
+                        deployedVerticle.onSuccess(res -> LOGGER.info(">>>>>> Verticle started deployment id " + res.toLowerCase()))
+                                .onFailure(exception -> {
+                                    exception.printStackTrace();
+                                    LOGGER.error("Error starting >>>>> " + exception.getMessage());
+                                }));
     }
 
     public static Stream<Future<String>> start(DeploymentOptions deploymentOptions, String[] verticles) {
+        return start(Vertx.vertx(getVertxOptions()), deploymentOptions, verticles);
+    }
+
+    private static VertxOptions getVertxOptions() {
         DefaultChannelId.newInstance();
         VertxOptions vertxOptions = new VertxOptions();
         vertxOptions.setEventLoopPoolSize(5);
         vertxOptions.setWorkerPoolSize(1);
         vertxOptions.setInternalBlockingPoolSize(1);
-        return start(Vertx.vertx(vertxOptions), deploymentOptions, verticles).map(id -> {
-            LOGGER.info("Main verticle ready and started <<<<<<<<<<<<<<<<<<<<<< " + id);
-            return id;
-        });
+        return vertxOptions;
     }
 
     public static Stream<Future<String>> start(Vertx vertx, DeploymentOptions deploymentOptions, String[] verticles) {

@@ -3,6 +3,7 @@ package com.micifuz.authn;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.micifuz.commons.Runner;
+import com.micifuz.tests.resources.FreePortLocator;
 
 import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
@@ -28,13 +30,14 @@ public class SimpleTest {
     static String deploymentId;
 
     @BeforeAll
-    static void beforeAll(Vertx vertx, VertxTestContext testContext) {
+    static void beforeAll(Vertx vertx, VertxTestContext testContext) throws IOException {
+        int freePort = FreePortLocator.getFreePort(); //TODO: @pjgg -> Use this port to start http verticles.
         Runner.start(vertx, AuthMainVerticle.class.getName())
                 .onFailure(Throwable::printStackTrace)
-              .onComplete(res -> {
-                  deploymentId = res.result();
-                  testContext.completeNow();
-              });
+                .onComplete(res -> {
+                    deploymentId = res.result();
+                    testContext.completeNow();
+                });
     }
 
     @AfterAll
@@ -45,11 +48,11 @@ public class SimpleTest {
     @Test
     void should_simplyWork() {
         RestAssured.given()
-                   .port(AUTHN_PORT)
-                   .when().get("/hello")
-                   .then()
-                   .statusCode(200)
-                   .body("hello", is("world: authN"));
+                .port(AUTHN_PORT)
+                .when().get("/hello")
+                .then()
+                .statusCode(200)
+                .body("hello", is("world: authN"));
     }
 
     @Test
@@ -57,10 +60,11 @@ public class SimpleTest {
     void should_healthCheck_up(Vertx vertx, VertxTestContext testContext) {
         HttpClient client = vertx.createHttpClient();
 
-        client.request(HttpMethod.GET, AUTHN_PORT, AUTHN_HOST, "/health").compose(req -> req.send()
-                                                                                            .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
-                                                                                                assertThat(httpResp.statusCode(), is(200));
-                                                                                                testContext.completeNow();
-                                                                                            }))));
+        client.request(HttpMethod.GET, AUTHN_PORT, AUTHN_HOST, "/health")
+                .compose(req -> req.send()
+                        .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
+                            assertThat(httpResp.statusCode(), is(200));
+                            testContext.completeNow();
+                        }))));
     }
 }
