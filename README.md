@@ -21,3 +21,27 @@ Please, read [How to build the project with bazel](./docs/build.md)
 ## Continuous Integration 
 
 Please, read [How Continuous Integration is configured](./docs/continuous-integration.md)
+
+## Conventions
+
+### Testing Conventions
+
+### Runtime properties and test scenario custom configuration
+
+When we are testing is common to have scenarios that could be reproduced just under some configurations. This is why
+you can define your custom `config.yaml` through a `DeploymentOptions()` config.
+
+Example:
+
+Imagine that we have a `scenario_config.yaml` where the service properties are defined.
+
+```java
+    JsonObject scenarioConfig = new JsonObject()
+            .put("server.port", 8888)
+            .put("path", "scenario_config.yaml");
+
+    Main.start(vertx, new DeploymentOptions().setConfig(scenarioConfig)).result();
+```
+
+In the above example, your service will use `scenario_config.yaml` because is passed through a deploymentOptions under
+`path` key. Also, we are overwriting the property `server.port` with a runtime value.
