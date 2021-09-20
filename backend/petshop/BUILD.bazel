@@ -1,4 +1,4 @@
-load("@//:deps.bzl", "COMMON_DEPS", "COMMON_TESTS_DEPS")
+load("@//bazel:deps.bzl", "COMMON_DEPS", "COMMON_TESTS_DEPS")
 
 java_library(
     name = "deps",

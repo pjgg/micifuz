@@ -10,6 +10,6 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
 )
 
-load("@//:maven.bzl", "maven")
+load("@//bazel:maven.bzl", "maven")
 
 maven()
