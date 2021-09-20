@@ -4,6 +4,7 @@ java_library(
     resources = glob(["**/src/main/resources/**"]),
     visibility = ["//visibility:public"],
     deps = [
+        "//backend/commons:deps",
         "@vertx//:io_netty_netty_transport",
         "@vertx//:io_reactivex_rxjava2_rxjava",
         "@vertx//:io_vertx_vertx_config",
@@ -23,6 +24,7 @@ java_library(
     resources = glob(["**/src/test/resources/**"]),
     visibility = ["//visibility:public"],
     deps = [
+        "//backend/commons:deps",
         ":deps",
         "@mockito//:org_mockito_mockito_core",
         "@mockito//:org_mockito_mockito_junit_jupiter",
@@ -56,7 +58,8 @@ java_test(
 
 java_binary(
     name = "service",
-    main_class = "com.micifuz.authn.Main",
+    args = ["com.micifuz.authn.AuthMainVerticle"],
+    main_class = "com.micifuz.commons.Runner",
     visibility = ["//visibility:public"],
     runtime_deps = [
         ":deps",

@@ -1,7 +1,7 @@
 package com.micifuz.authn.ioc;
 
 import com.micifuz.authn.handlers.HelloHandler;
-import com.micifuz.authn.healthChecks.Procedures;
+import com.micifuz.authn.handlers.HealthChecks;
 import com.micifuz.authn.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;
@@ -24,8 +24,8 @@ public class IoC {
     private IoC() {
         routing = new Routing();
         Vertx vertx = Vertx.currentContext().owner();
-        Procedures healthCheckProcedures = new Procedures(vertx);
-        healthCheckHandler = healthCheckProcedures.getHealthCheckHandler();
+        HealthChecks healthCheckHealthChecks = new HealthChecks(vertx);
+        healthCheckHandler = healthCheckHealthChecks.getHealthCheckHandler();
         helloHandler = new HelloHandler();
     }
 

@@ -10,8 +10,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.micifuz.commons.Runner;
+
 import io.restassured.RestAssured;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
@@ -27,8 +28,13 @@ public class SimpleTest {
     static String deploymentId;
 
     @BeforeAll
-    static void beforeAll(Vertx vertx) {
-        deploymentId = Main.start(vertx, new DeploymentOptions()).result();
+    static void beforeAll(Vertx vertx, VertxTestContext testContext) {
+        Runner.start(vertx, AuthMainVerticle.class.getName())
+                .onFailure(Throwable::printStackTrace)
+              .onComplete(res -> {
+                  deploymentId = res.result();
+                  testContext.completeNow();
+              });
     }
 
     @AfterAll
@@ -39,11 +45,11 @@ public class SimpleTest {
     @Test
     void should_simplyWork() {
         RestAssured.given()
-                .port(AUTHN_PORT)
-                .when().get("/hello")
-                .then()
-                .statusCode(200)
-                .body("hello", is("world: authN"));
+                   .port(AUTHN_PORT)
+                   .when().get("/hello")
+                   .then()
+                   .statusCode(200)
+                   .body("hello", is("world: authN"));
     }
 
     @Test
@@ -52,9 +58,9 @@ public class SimpleTest {
         HttpClient client = vertx.createHttpClient();
 
         client.request(HttpMethod.GET, AUTHN_PORT, AUTHN_HOST, "/health").compose(req -> req.send()
-                .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
-                    assertThat(httpResp.statusCode(), is(200));
-                    testContext.completeNow();
-                }))));
+                                                                                            .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
+                                                                                                assertThat(httpResp.statusCode(), is(200));
+                                                                                                testContext.completeNow();
+                                                                                            }))));
     }
 }

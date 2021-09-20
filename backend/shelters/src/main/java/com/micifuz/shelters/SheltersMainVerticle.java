@@ -1,6 +1,6 @@
-package com.micifuz.petshop;
+package com.micifuz.shelters;
 
-import com.micifuz.petshop.ioc.IoC;
+import com.micifuz.shelters.ioc.IoC;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -13,11 +13,11 @@ import io.vertx.reactivex.ext.web.Router;
 
 import java.util.Arrays;
 
-public class MainVerticle extends AbstractVerticle {
+public class SheltersMainVerticle extends AbstractVerticle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(SheltersMainVerticle.class.getName());
 	private final String HOST = "0.0.0.0";
-	private final Integer PORT = 8081;
+	private final Integer PORT = 8082;
 
 	@Override
 	public Completable rxStart() {

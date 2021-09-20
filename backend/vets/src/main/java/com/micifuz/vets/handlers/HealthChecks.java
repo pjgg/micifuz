@@ -1,4 +1,4 @@
-package com.micifuz.shelters.healthChecks;
+package com.micifuz.vets.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +10,12 @@ import io.vertx.reactivex.core.Promise;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.healthchecks.HealthCheckHandler;
 
-public class Procedures {
+public class HealthChecks {
 
     private Map<String, Handler<Promise<Status>>> healthChecks = new HashMap<>();
     private final Vertx vertx;
 
-    public Procedures(final Vertx vertx) {
+    public HealthChecks(final Vertx vertx) {
         this.vertx = vertx;
         healthChecks.put("postgresql", postgresql());
     }

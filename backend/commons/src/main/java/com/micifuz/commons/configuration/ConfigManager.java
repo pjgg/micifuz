@@ -1,4 +1,4 @@
-package com.micifuz.authn.configuration;
+package com.micifuz.commons.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 

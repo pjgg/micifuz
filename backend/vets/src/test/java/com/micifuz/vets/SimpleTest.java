@@ -10,8 +10,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.micifuz.commons.Runner;
+
 import io.restassured.RestAssured;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
@@ -26,8 +27,13 @@ public class SimpleTest {
     static String deploymentId;
 
     @BeforeAll
-    static void beforeAll(Vertx vertx) {
-        deploymentId = Main.start(vertx, new DeploymentOptions()).result();
+    static void beforeAll(Vertx vertx, VertxTestContext testContext) {
+        Runner.start(vertx, VetsMainVerticle.class.getName())
+              .onFailure(Throwable::printStackTrace)
+              .onComplete(res -> {
+                  deploymentId = res.result();
+                  testContext.completeNow();
+              });
     }
 
     @AfterAll

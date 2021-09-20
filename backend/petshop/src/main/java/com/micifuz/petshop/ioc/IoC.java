@@ -1,7 +1,7 @@
 package com.micifuz.petshop.ioc;
 
 import com.micifuz.petshop.handlers.HelloHandler;
-import com.micifuz.petshop.healthChecks.Procedures;
+import com.micifuz.petshop.handlers.HealthChecks;
 import com.micifuz.petshop.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;
@@ -24,8 +24,8 @@ public class IoC {
     public IoC() {
         routing = new Routing();
         Vertx vertx = Vertx.currentContext().owner();
-        Procedures healthCheckProcedures = new Procedures(vertx);
-        healthCheckHandler = healthCheckProcedures.getHealthCheckHandler();
+        HealthChecks healthCheckHealthChecks = new HealthChecks(vertx);
+        healthCheckHandler = healthCheckHealthChecks.getHealthCheckHandler();
         helloHandler = new HelloHandler();
     }
 
