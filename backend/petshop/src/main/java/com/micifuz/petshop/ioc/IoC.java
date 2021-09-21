@@ -21,7 +21,7 @@ public class IoC {
         return instance;
     }
 
-    public IoC() {
+    private IoC() {
         routing = new Routing();
         Vertx vertx = Vertx.currentContext().owner();
         HealthChecks healthCheckHealthChecks = new HealthChecks(vertx);

@@ -32,6 +32,10 @@ public class Runner {
         return start(Vertx.vertx(getVertxOptions()), deploymentOptions, verticles);
     }
 
+    public static Future<String> start(Vertx vertx, String verticle) {
+        return start(vertx, new DeploymentOptions(), verticle);
+    }
+
     private static VertxOptions getVertxOptions() {
         DefaultChannelId.newInstance();
         VertxOptions vertxOptions = new VertxOptions();
