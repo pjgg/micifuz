@@ -22,6 +22,8 @@ public class ConfigManager {
 
     private final Single<JsonObject> config;
 
+    private final JsonObject runtimeProperties;
+
     private enum FileType {JSON, YAML}
 
     public static synchronized ConfigManager getInstance(Vertx vertx) {
@@ -32,13 +34,14 @@ public class ConfigManager {
     }
 
     private ConfigManager(Vertx vertx) {
+        runtimeProperties = vertx.getOrCreateContext().config();
         ConfigRetrieverOptions opt = new ConfigRetrieverOptions().addStore(getConfigStoreOpt(FileType.YAML));
         ConfigRetriever configRetriever = ConfigRetriever.create(vertx, opt);
         config = configRetriever.rxGetConfig();
     }
 
     public Single<Boolean> resolveProperty(String query, Boolean defaultValue) {
-        String value = System.getenv(toEnvironmentVariableName(query));
+        String value = getEnv(toEnvironmentVariableName(query), runtimeProperties.getString(query));
         if (StringUtils.isBlank(value)) {
             return config.map(config -> {
                 if (!isLeaf(query)) {
@@ -53,7 +56,7 @@ public class ConfigManager {
     }
 
     public Single<String> resolveProperty(String query, String defaultValue) {
-        String value = System.getenv(toEnvironmentVariableName(query));
+        String value = getEnv(toEnvironmentVariableName(query), runtimeProperties.getString(query));
         if (StringUtils.isBlank(value)) {
             return config.map(config -> {
                 if (!isLeaf(query)) {
@@ -68,7 +71,7 @@ public class ConfigManager {
     }
 
     public Single<Integer> resolveProperty(String query, int defaultValue) {
-        String value = System.getenv(toEnvironmentVariableName(query));
+        String value = getEnv(toEnvironmentVariableName(query), runtimeProperties.getString(query));
         if (StringUtils.isBlank(value)) {
             return config.map(config -> {
                 if (!isLeaf(query)) {
@@ -86,6 +89,15 @@ public class ConfigManager {
         return config;
     }
 
+    private String getEnv(String name, String defaultValue) {
+        String value = System.getenv(name);
+        if (StringUtils.isBlank(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
     private String toEnvironmentVariableName(String name) {
         return ENV_PREFIX + ENV_SEPARATOR + name.replace(".", ENV_SEPARATOR).toUpperCase();
     }
@@ -98,9 +110,9 @@ public class ConfigManager {
     }
 
     private String getConfigPath() {
-        String configPath = System.getenv("VERTX_CONFIG_PATH");
+        String configPath = getEnv("VERTX_CONFIG_PATH", runtimeProperties.getString("path"));
         if (StringUtils.isBlank(configPath)) {
-            LOG.warn("Missing VERTX_CONFIG_PATH environment variable. Set config default path to config.yaml");
+            LOG.warn("Missing VERTX_CONFIG_PATH environment variable. Set config default path to simpleTest-config.yaml");
             configPath = DEFAULT_CONFIG_PATH;
         }
         return configPath;
