@@ -23,7 +23,6 @@ def maven():
             "io.vertx:vertx-web-client:%s" % VERTX_VERSION,
             "io.vertx:vertx-core:%s" % VERTX_VERSION,
             "io.vertx:vertx-rx-java2:%s" % VERTX_VERSION,
-            "io.vertx:vertx-rx-java2:%s" % VERTX_VERSION,
             "io.vertx:vertx-config:%s" % VERTX_VERSION,
             "io.vertx:vertx-config-yaml:%s" % VERTX_VERSION,
             "io.netty:netty-transport:%s" % NETTY_TRANSPORT_VERSION,
