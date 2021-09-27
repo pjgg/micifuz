@@ -24,6 +24,18 @@ Please, read [How Continuous Integration is configured](./docs/continuous-integr
 
 ## Conventions
 
+### Commit message guidelines
+
+Basically you could read and follow the [following post](https://chris.beams.io/posts/git-commit/)
+
+1. Separate subject from body with a blank line
+2. Limit the subject line to 50 characters
+3. Capitalize the subject line
+4. Do not end the subject line with a period
+5. Use the imperative mood in the subject line
+6. Wrap the body at 72 characters
+7. Use the body to explain what and why vs. how
+
 ### Pull Requests guidelines
 * Provide context for the reviewer in the description of the PR
 * Prepare PR for main first
@@ -33,7 +45,7 @@ Please, read [How Continuous Integration is configured](./docs/continuous-integr
 * Provide the link to the main PR in the branch PR
 * Branch PR should have a label branch. If doesn't exist create it. For example `1.0.0`
 * Each developer must work in his own fork and make a PR from his fork/branch to main, 
-so `https://github.com/bytesandmonkeys/micifuz` will only have product branches and main. 
+so `https://github.com/bytesandmonkeys/micifuz` will only have product branches and main.
 
 ### Testing Conventions
 
