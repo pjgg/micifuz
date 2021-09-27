@@ -12,7 +12,7 @@ jobs:
         java: [ 11 ]
     steps:
       - uses: actions/checkout@v2
-        name: Reclaim Disk Space
+      - name: Reclaim Disk Space
         run: .github/ci-prerequisites.sh
       - name: Install JDK {{ matrix.java }}
         uses: actions/setup-java@v2
