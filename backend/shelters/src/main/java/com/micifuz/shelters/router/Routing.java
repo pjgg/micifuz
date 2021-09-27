@@ -1,6 +1,7 @@
 package com.micifuz.shelters.router;
 
 import com.micifuz.shelters.ioc.IoC;
+
 import io.reactivex.Single;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.Router;
@@ -20,4 +21,3 @@ public class Routing {
         return Single.just(router);
     }
 }
-

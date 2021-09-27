@@ -1,8 +1,7 @@
 package com.micifuz.shelters.ioc;
 
-
-import com.micifuz.shelters.handlers.HelloHandler;
 import com.micifuz.shelters.handlers.HealthChecks;
+import com.micifuz.shelters.handlers.HelloHandler;
 import com.micifuz.shelters.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;
