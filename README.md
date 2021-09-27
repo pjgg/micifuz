@@ -24,6 +24,17 @@ Please, read [How Continuous Integration is configured](./docs/continuous-integr
 
 ## Conventions
 
+### Pull Requests guidelines
+* Provide context for the reviewer in the description of the PR
+* Prepare PR for main first
+* PR for a branch can come together with the main PR
+* PR for main needs to be reviewed and merged first
+* PR for branch needs to be based on cherry-picked commit(s) from the main unless explained in the description
+* Provide the link to the main PR in the branch PR
+* Branch PR should have a label branch. If doesn't exist create it. For example `1.0.0`
+* Each developer must work in his own fork and make a PR from his fork/branch to main, 
+so `https://github.com/bytesandmonkeys/micifuz` will only have product branches and main. 
+
 ### Testing Conventions
 
 ### Runtime properties and test scenario custom configuration
