@@ -49,7 +49,7 @@ so `https://github.com/bytesandmonkeys/micifuz` will only have product branches 
 
 ### Testing Conventions
 
-### Runtime properties and test scenario custom configuration
+#### Runtime properties and test scenario custom configuration
 
 When we are testing is common to have scenarios that could be reproduced just under some configurations. This is why
 you can define your custom `config.yaml` through a `DeploymentOptions()` config.
