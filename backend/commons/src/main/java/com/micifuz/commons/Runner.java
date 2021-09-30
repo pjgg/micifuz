@@ -12,7 +12,6 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 
 public class Runner {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Runner.class.getName());
 
     public static void main(String[] args) {
@@ -20,12 +19,12 @@ public class Runner {
         DeploymentOptions deploymentOptions = new DeploymentOptions();
         deploymentOptions.setInstances(1);
         start(deploymentOptions, args)
-                .forEach(deployedVerticle ->
-                        deployedVerticle.onSuccess(res -> LOGGER.info(">>>>>> Verticle started deployment id " + res.toLowerCase()))
-                                .onFailure(exception -> {
-                                    exception.printStackTrace();
-                                    LOGGER.error("Error starting >>>>> " + exception.getMessage());
-                                }));
+                .forEach(deployedVerticle -> deployedVerticle
+                        .onSuccess(res -> LOGGER.info(">>>>>> Verticle started deployment id " + res.toLowerCase()))
+                        .onFailure(exception -> {
+                            exception.printStackTrace();
+                            LOGGER.error("Error starting >>>>> " + exception.getMessage());
+                        }));
     }
 
     public static Stream<Future<String>> start(DeploymentOptions deploymentOptions, String[] verticles) {

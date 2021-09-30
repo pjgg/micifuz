@@ -21,4 +21,3 @@ public class Routing {
         return Single.just(router);
     }
 }
-

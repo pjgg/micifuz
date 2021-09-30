@@ -1,7 +1,7 @@
 package com.micifuz.petshop.ioc;
 
-import com.micifuz.petshop.handlers.HelloHandler;
 import com.micifuz.petshop.handlers.HealthChecks;
+import com.micifuz.petshop.handlers.HelloHandler;
 import com.micifuz.petshop.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;

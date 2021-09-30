@@ -1,7 +1,7 @@
 package com.micifuz.vets.ioc;
 
-import com.micifuz.vets.handlers.HelloHandler;
 import com.micifuz.vets.handlers.HealthChecks;
+import com.micifuz.vets.handlers.HelloHandler;
 import com.micifuz.vets.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;

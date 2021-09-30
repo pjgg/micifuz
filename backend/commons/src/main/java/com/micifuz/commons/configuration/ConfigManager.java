@@ -24,7 +24,10 @@ public class ConfigManager {
 
     private final JsonObject runtimeProperties;
 
-    private enum FileType {JSON, YAML}
+    private enum FileType {
+        JSON,
+        YAML
+    }
 
     public static synchronized ConfigManager getInstance(Vertx vertx) {
         if (instance == null) {

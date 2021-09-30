@@ -3,8 +3,8 @@ package com.micifuz.authn;
 import java.util.Arrays;
 
 import com.micifuz.authn.ioc.IoC;
-
 import com.micifuz.commons.configuration.ConfigManager;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.vertx.core.impl.logging.Logger;

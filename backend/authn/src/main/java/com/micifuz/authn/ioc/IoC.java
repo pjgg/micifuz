@@ -1,7 +1,7 @@
 package com.micifuz.authn.ioc;
 
-import com.micifuz.authn.handlers.HelloHandler;
 import com.micifuz.authn.handlers.HealthChecks;
+import com.micifuz.authn.handlers.HelloHandler;
 import com.micifuz.authn.router.Routing;
 
 import io.vertx.reactivex.core.Vertx;
