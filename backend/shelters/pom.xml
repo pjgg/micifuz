@@ -10,6 +10,9 @@
     <artifactId>micifuz-shelters</artifactId>
     <packaging>jar</packaging>
     <name>Micifuz: shelters</name>
+    <properties>
+        <main.verticle>com.micifuz.shelters.SheltersMainVerticle</main.verticle>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.micifuz</groupId>

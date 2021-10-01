@@ -6,9 +6,14 @@ Micifuz aims to be a showroom for vert.x projects.
 
 Please, use [this code style format](./docs/micifuz-formats.xml)
 
-### Maven build
+### Maven example commands
 
-Execute ```mvn clean install```
+Run authn service: `mvn exec:java -pl backend/authn`
+Debug vets: ` mvnDebug exec:java -pl backend/vets `
+Build authN fat jar: `mvn clean package -pl backend/authn -DskipTests`
+Validate format: `mvn -V -B verify -Pvets,authn,petshop,shelters -Dvalidate-format -DskipTests -DskipITs`
+Run test: `mvn -fae -V -B clean verify`
+Run authn test: `mvn -fae -V -B clean verify -pl backend/authn`
 
 ## Continuous Integration 
 
