@@ -1,3 +1,0 @@
-server:
-  # Port is overwritten by the SimpleTest
-  port: 8080

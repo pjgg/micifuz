@@ -73,6 +73,10 @@ so `https://github.com/bytesandmonkeys/micifuz` will only have product branches 
 
 ### Testing Conventions
 
+### Internal APIS
+
+All internal APIs should start by `/internal/*` path
+
 #### Runtime properties and test scenario custom configuration
 
 When we are testing is common to have scenarios that could be reproduced just under some configurations. This is why
@@ -92,3 +96,34 @@ Imagine that we have a `scenario_config.yaml` where the service properties are d
 
 In the above example, your service will use `scenario_config.yaml` because is passed through a deploymentOptions under
 `path` key. Also, we are overwriting the property `server.port` with a runtime value.
+
+## Modules
+### AuthN
+
+Flavor: `Quarkus/vertx`
+
+This module is just a Keycloak facade. Keycloak gives you a full authentication/Z for your services and users, with minimum fuss. 
+In theory you should not need a facade, because the standard solution is good enough, but sometimes you need to add some 
+extra synchronization or you need to migrate some existing auth provider to the new one so well this is just an example. 
+
+### Launch by hand
+
+1. Environment (Keycloak) 
+`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/main/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
+
+Note that we are pointing to the following keycloak [config file](./backend/authn/src/main/resources/keycloak-example-realm.json)
+
+2. Service
+DevMode: `mvn quarkus:dev -pl backend/authn`
+Debug: `mvn quarkus:dev -pl backend/authn -Ddebug`
+
+Default users: 
+Common user/password: `Pablo/Pablo`
+ClientId: `petshop-client-id`
+Secret: `topSecret`
+
+### Useful links
+
+Dev UI: `http://localhost:8080/dev/`
+Swagger UI: `http://localhost:8080/swagger-ui/#/`
+Keycloak dashboard: `http://localhost:8180/auth/admin/`  (admin/admin)

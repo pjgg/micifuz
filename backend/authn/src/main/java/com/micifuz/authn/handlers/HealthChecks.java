@@ -1,36 +1,61 @@
 package com.micifuz.authn.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Duration;
 
-import io.vertx.core.Handler;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.healthchecks.Status;
-import io.vertx.reactivex.core.Promise;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.ext.healthchecks.HealthCheckHandler;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-public class HealthChecks {
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
 
-    private static final String POSTGRESQL_NAME = "postgresql";
-    private final Map<String, Handler<Promise<Status>>> healthChecks = new HashMap<>();
-    private final Vertx vertx;
+import io.smallrye.health.api.AsyncHealthCheck;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.mutiny.ext.web.client.predicate.ResponsePredicate;
 
-    public HealthChecks(final Vertx vertx) {
-        this.vertx = vertx;
-        healthChecks.put(POSTGRESQL_NAME, postgresql());
+@Readiness
+@Liveness
+@ApplicationScoped
+public class HealthChecks implements AsyncHealthCheck {
+
+    private static final int RETRIES = 3;
+    private static final int TIMEOUT = 30;
+
+    @ConfigProperty(name = "quarkus.oidc.auth-server-url")
+    String oauthServerUrl;
+    String keycloakUrl;
+
+    @Inject
+    Vertx vertx;
+
+    private WebClient httpClient;
+
+    @PostConstruct
+    void initialize() throws URISyntaxException {
+        httpClient = WebClient.create(vertx);
+        URI serverUri = new URI(oauthServerUrl);
+        keycloakUrl = String.format("%s://%s:%d", serverUri.getScheme(), serverUri.getHost(), serverUri.getPort());
     }
 
-    public HealthCheckHandler getHealthCheckHandler() {
-        HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
-        for (Map.Entry<String, Handler<Promise<Status>>> procedure : healthChecks.entrySet()) {
-            healthCheckHandler.register(procedure.getKey(), procedure.getValue());
+    @Override
+    public Uni<HealthCheckResponse> call() {
+        try {
+            return httpClient.getAbs(keycloakUrl)
+                    .expect(ResponsePredicate.status(HttpURLConnection.HTTP_OK))
+                    .send()
+                    .map(resp -> HealthCheckResponse.up("Keycloak Up!"))
+                    .ifNoItem().after(Duration.ofSeconds(TIMEOUT)).fail()
+                    .onFailure().retry().atMost(RETRIES);
+
+        } catch (Exception e) {
+            return Uni.createFrom().item(HealthCheckResponse.down(e.getMessage()));
         }
-
-        return healthCheckHandler;
-    }
-
-    public Handler<Promise<Status>> postgresql() {
-        return promise -> promise.complete(Status.OK(new JsonObject().put("status", "running")));
     }
 }
