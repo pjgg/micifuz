@@ -10,6 +10,33 @@ Please, use [this code style format](./docs/micifuz-formats.xml)
 
 Execute ```mvn clean install```
 
+### Running services
+
+`com.micifuz.commons.Runner`, in commons is the responsible to start vert.x verticles, as main class and passing 1-n verticles as args. This gives some flexibility to have all-in-one service (this is useful for integration tests, not prod environments) or start 1 service / process each verticle, in a more micro-services manner.
+
+Each module has 1 main verticle, for example `auth` has `com.micifuz.authn.AuthMainVerticle`
+
+#### From IDEs
+
+##### VsCode
+
+Check / Use [launch.json](.vscode/launch.json)
+
+##### IntelliJ
+
+Set the main class  `com.micifuz.commons.Runner` and pass the verticle to be run, depending on the module.
+
+
+#### Modules & Verticles
+
+| Module          | Verticle           |
+| -------------   |-------------| 
+| `authn`         | `com.micifuz.authn.AuthMainVerticle` | 
+| `petshop`       | `com.micifuz.petshop.PetShopMainVerticle` | 
+| `shelters`      | `com.micifuz.shelters.SheltersMainVerticle` | 
+| `vets`          | `com.micifuz.vets.VetsMainVerticle` | 
+
+
 ## Continuous Integration 
 
 Please, read [How Continuous Integration is configured](./docs/continuous-integration.md)

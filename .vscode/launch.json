@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Authn Runner",
+            "request": "launch",
+            "mainClass": "com.micifuz.commons.Runner",
+            "projectName": "authn",
+            "args": "com.micifuz.authn.AuthMainVerticle"
+        },
+        {
+            "type": "java",
+            "name": "Petshop Runner",
+            "request": "launch",
+            "mainClass": "com.micifuz.commons.Runner",
+            "projectName": "petshop",
+            "args": "com.micifuz.petshop.PetShopMainVerticle"
+        },
+        {
+            "type": "java",
+            "name": "Petshop Runner",
+            "request": "launch",
+            "mainClass": "com.micifuz.commons.Runner",
+            "projectName": "shelters",
+            "args": "com.micifuz.shelters.SheltersMainVerticle"
+        },
+        {
+            "type": "java",
+            "name": "Vets Runner",
+            "request": "launch",
+            "mainClass": "com.micifuz.commons.Runner",
+            "projectName": "vets",
+            "args": "com.micifuz.vets.VetsMainVerticle"
+        }
+        
+    ]
+}
