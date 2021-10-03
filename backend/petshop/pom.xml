@@ -10,6 +10,9 @@
     <artifactId>micifuz-petshop</artifactId>
     <packaging>jar</packaging>
     <name>Micifuz: petshop</name>
+    <properties>
+        <main.verticle>com.micifuz.petshop.PetShopMainVerticle</main.verticle>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.micifuz</groupId>

@@ -115,7 +115,7 @@ public class ConfigManager {
     private String getConfigPath() {
         String configPath = getEnv("VERTX_CONFIG_PATH", runtimeProperties.getString("path"));
         if (StringUtils.isBlank(configPath)) {
-            LOG.warn("Missing VERTX_CONFIG_PATH environment variable. Set config default path to simpleTest-config.yaml");
+            LOG.warn("Missing VERTX_CONFIG_PATH environment variable. Set config default path to " + DEFAULT_CONFIG_PATH);
             configPath = DEFAULT_CONFIG_PATH;
         }
         return configPath;

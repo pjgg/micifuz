@@ -10,6 +10,9 @@
     <artifactId>authn</artifactId>
     <packaging>jar</packaging>
     <name>Micifuz: authn</name>
+    <properties>
+        <main.verticle>com.micifuz.authn.AuthMainVerticle</main.verticle>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.micifuz</groupId>

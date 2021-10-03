@@ -10,6 +10,9 @@
     <artifactId>micifuz-vets</artifactId>
     <packaging>jar</packaging>
     <name>Micifuz: vets</name>
+    <properties>
+        <main.verticle>com.micifuz.vets.VetsMainVerticle</main.verticle>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.micifuz</groupId>

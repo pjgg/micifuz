@@ -32,6 +32,12 @@ jobs:
     needs: linux-validate-format
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - id: files
         uses: jitterbit/get-changed-files@v1
         continue-on-error: true
@@ -80,7 +86,7 @@ jobs:
           MODULES_MAVEN_PARAM=""
           if [[ -n ${MODULES_ARG} ]]; then
             echo "Running modules: ${MODULES_ARG}"
-            MODULES_MAVEN_PARAM="-pl ${MODULES_ARG}"
+            MODULES_MAVEN_PARAM="-pl backend/test-resources,backend/commons,${MODULES_ARG}"
           fi
 
           mvn -fae -V -B clean verify $MODULES_MAVEN_PARAM
