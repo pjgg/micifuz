@@ -1,0 +1,111 @@
+openapi: 3.0.1
+info:
+  title: AuthN API
+  description: Add authentication to applications and secure services with minimum fuss. No need to deal with storing users or authenticating users. It's all available out of the box.
+  termsOfService: 'https://swagger.io/tools/swaggerhub/'
+  contact:
+    email: pablo.gonzalez.granados@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 2.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: 'http://localhost:8080'
+    description: local enviroment
+tags:
+  - name: Authentication
+    description: Oauth credentials and password grant type flow
+
+paths:
+  /internal/oauth/token:
+    post:
+      tags:
+        - Authentication
+      summary: Create a JWT token follow client credentials (for services) or password (for users) flow
+      description: internal method don't expose directly this API to an external application. The secret should not travel abroad your company.You should talk to this API through a backend for front end and return the final accessToken to the end user.
+      operationId: createAccessToken
+      security:
+        - basicAuth: []
+      requestBody:
+        description: user info to be filled
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+              properties:
+                grant_type:
+                  type: string
+                  description: password or client_credentials
+                username:
+                  type: string
+                  description: user name (not required with client_credentials)
+                password:
+                  type: string
+                  description: user password (not required with client_credentials)
+
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/accessToken'
+
+components:
+  schemas:
+    credentials:
+      type: object
+      required: ["grant_type" ]
+      properties:
+        grant_type:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    accessToken:
+      type: object
+      required: [ "id", "name", "lastName" ]
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+        scope:
+          type: string
+        expires_in:
+          type: integer
+        refresh_expires_in:
+          type: integer
+        not-before-policy:
+          type: integer
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: See http://developers.gettyimages.com/api/docs/v3/oauth2.html
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:8080/internal/oauth/token
+          scopes: {}
+    oAuth2Password:
+      type: oauth2
+      description: See https://developers.getbase.com/docs/rest/articles/oauth2/requests
+      flows:
+        password:
+          tokenUrl: http://localhost:8080/internal/oauth/token
+          scopes:
+            read: Grant read-only access to all your data except for the account and user info
+            write: Grant write-only access to all your data except for the account and user info
+            profile: Grant read-only access to the account and user info only
