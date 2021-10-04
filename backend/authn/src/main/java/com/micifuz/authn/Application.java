@@ -9,8 +9,8 @@ import org.jboss.logging.Logger;
 
 import com.micifuz.authn.handlers.CheckBasicAuthHandler;
 import com.micifuz.authn.handlers.FailureHandler;
-import com.micifuz.authn.handlers.HelloHandler;
 import com.micifuz.authn.handlers.OauthHandler;
+import com.micifuz.commons.handlers.Redirections;
 
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
@@ -31,7 +31,6 @@ public class Application {
 
     private static final Logger LOG = Logger.getLogger(Application.class);
 
-    private static final String HELLO = "/hello";
     private static final String OAUTH = "/internal/oauth/token";
     private static final String ROOT = "/";
 
@@ -40,9 +39,6 @@ public class Application {
 
     @Inject
     FailureHandler failureHandler;
-
-    @Inject
-    HelloHandler helloHandler;
 
     @Inject
     CheckBasicAuthHandler checkBasicAuthHandler;
@@ -62,10 +58,9 @@ public class Application {
     void onStart(@Observes StartupEvent ev) {
         LOG.info(String.format("Application %s starting...", serviceName));
         SessionHandler sessionHandler = SessionHandler.create(LocalSessionStore.create(vertx));
-        addRoute(HttpMethod.GET, HELLO, rc -> helloHandler.execute(rc));
         addRoute(HttpMethod.POST, OAUTH, sessionHandler, rc -> checkBasicAuthHandler.execute(rc),
                 rc -> oauthHandler.createAccessToken(rc));
-        addRoute(HttpMethod.GET, ROOT, rc -> helloHandler.execute(rc));
+        addRoute(HttpMethod.GET, ROOT, Redirections::toSwaggerUI);
     }
 
     void onStop(@Observes ShutdownEvent ev) {

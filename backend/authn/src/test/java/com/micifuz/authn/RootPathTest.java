@@ -3,6 +3,7 @@ package com.micifuz.authn;
 import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_FILE_NAME_KEY;
 import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAME_KEY;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
@@ -18,31 +19,14 @@ import io.quarkus.test.junit.QuarkusTest;
         @ResourceArg(value = "keycloak-example-realm.json", name = PARAM_REALM_FILE_NAME_KEY),
         @ResourceArg(value = "micifuz", name = PARAM_REALM_NAME_KEY)
 })
-public class HealthCheckTest {
-    @Test
-    public void serviceUp() {
-        given()
-                .when()
-                .get("/health")
-                .then()
-                .statusCode(HttpStatus.SC_OK);
-    }
+public class RootPathTest {
 
     @Test
-    public void livenessUp() {
-        given()
-                .when()
-                .get("/health/live")
-                .then()
-                .statusCode(HttpStatus.SC_OK);
-    }
+    public void rootPathShouldRedirectToSwaggerUI() {
+        given().redirects().follow(false).get("/")
+                .then().statusCode(HttpStatus.SC_MOVED_PERMANENTLY)
+                .and().header("Location", containsString("/swagger-ui"));
 
-    @Test
-    public void readinessUp() {
-        given()
-                .when()
-                .get("/health/ready")
-                .then()
-                .statusCode(HttpStatus.SC_OK);
+        given().get("/").then().statusCode(HttpStatus.SC_OK);
     }
 }

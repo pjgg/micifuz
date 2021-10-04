@@ -11,7 +11,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
-public class KeycloakTestContainer implements QuarkusTestResourceLifecycleManager {
+public class Keycloak15TestContainer implements QuarkusTestResourceLifecycleManager {
 
     public static final String PARAM_REALM_FILE_NAME_KEY = "realm_file";
     public static final String PARAM_REALM_NAME_KEY = "realm_name";
@@ -26,7 +26,7 @@ public class KeycloakTestContainer implements QuarkusTestResourceLifecycleManage
 
     private static final String DEFAULT_REALM_FILE = "realm.json";
     private static final String REALM_FILE = "/tmp/" + DEFAULT_REALM_FILE;
-    private static final String KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:15.0.2";
+    private static final String KEYCLOAK_IMAGE = System.getProperty("keycloak.15.image");
 
     private GenericContainer<?> container;
     private Map<String, String> params = new HashMap<>();
