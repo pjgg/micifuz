@@ -1,7 +1,7 @@
 package com.micifuz.authn.handlers;
 
-import static com.micifuz.authn.handlers.CheckBasicAuthHandler.CLIENT_ID;
-import static com.micifuz.authn.handlers.CheckBasicAuthHandler.SECRET;
+import static com.micifuz.commons.handlers.CheckBasicAuthHandler.CLIENT_ID;
+import static com.micifuz.commons.handlers.CheckBasicAuthHandler.SECRET;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -26,5 +26,4 @@ public class OauthHandler {
         Credentials credentials = new Credentials(oauthServerUrl, clientId, secret, ctx.request());
         ctx.response().putHeader("content-type", "application/json").end(Json.encode(credentials.createAccessToken()));
     }
-
 }

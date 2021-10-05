@@ -114,7 +114,7 @@ extra synchronization or you need to migrate some existing auth provider to the 
 ### Launch by hand
 
 1. Environment (Keycloak) 
-`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/main/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
+`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/test/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
 
 Note that we are pointing to the following keycloak [config file](./backend/authn/src/main/resources/keycloak-example-realm.json)
 
