@@ -25,7 +25,7 @@ jobs:
           check-latest: true
       - name: Build with Maven
         run: |
-          mvn -V -B verify -Pvets,authn,petshop,shelters -Dvalidate-format -DskipTests -DskipITs
+          mvn -fae -V -B verify -Pvets,authn,petshop,shelters -Dvalidate-format -DskipTests -DskipITs
   detect-modules-changes:
     name: Detect Modules in PR
     runs-on: ubuntu-latest
@@ -90,3 +90,26 @@ jobs:
           fi
 
           mvn -fae -V -B clean verify $MODULES_MAVEN_PARAM
+      - name: Upload Unit Test Results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Unit Test Results (java ${{ matrix.java }})
+          path: backend/**/target/surefire-reports/*.xml
+
+  publish-test-results:
+    name: "Publish Unit Tests Results"
+    needs: verify-micifuz-modules
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@v2
+        with:
+          path: test-results
+      - run: ls -l
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: test-results/**/target/surefire-reports/*.xml
+

@@ -2,6 +2,7 @@
 
 Micifuz aims to be a showroom for vert.x projects. 
 
+[![Daily Build](https://github.com/bytesandmonkeys/micifuz/actions/workflows/daily.yaml/badge.svg)](https://github.com/bytesandmonkeys/micifuz/actions/workflows/daily.yaml)
 ## Code style
 
 Please, use [this code style format](./docs/micifuz-formats.xml)
