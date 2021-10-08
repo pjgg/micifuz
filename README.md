@@ -71,11 +71,16 @@ Basically you could read and follow the [following post](https://chris.beams.io/
 * Each developer must work in his own fork and make a PR from his fork/branch to main, 
 so `https://github.com/bytesandmonkeys/micifuz` will only have product branches and main.
 
+### Service APIs
+
+- Root path `http://your.domain.com/` should redirect to swagger-ui
+- All internal APIs should start by `http://your.domain.com/internal/*` path
+
 ### Testing Conventions
 
-### Internal APIS
-
-All internal APIs should start by `/internal/*` path
+### Docker image definition
+All docker `image:version` will be defined as system properties on the main `pom.xml` as a part of the configuration of `maven-surefire-plugin`
+and will follow the following pattern: `imageName.2digitsVersion.image` for example `keycloak.15.image`
 
 #### Runtime properties and test scenario custom configuration
 
@@ -109,7 +114,7 @@ extra synchronization or you need to migrate some existing auth provider to the 
 ### Launch by hand
 
 1. Environment (Keycloak) 
-`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/main/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
+`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/test/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
 
 Note that we are pointing to the following keycloak [config file](./backend/authn/src/main/resources/keycloak-example-realm.json)
 

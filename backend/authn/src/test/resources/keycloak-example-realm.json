@@ -9,6 +9,15 @@
       },
       {
         "name": "admin-role"
+      },
+      {
+        "name": "user-petshop"
+      },
+      {
+        "name": "user-vets"
+      },
+      {
+        "name": "user-shelters"
       }
     ]
   },
@@ -23,7 +32,7 @@
         }
       ],
       "realmRoles": [
-        "user-role"
+        "user-role", "user-petshop"
       ]
     }
   ],

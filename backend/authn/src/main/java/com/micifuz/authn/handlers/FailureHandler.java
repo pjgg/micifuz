@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.quarkus.security.UnauthorizedException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.HttpException;
 
 @ApplicationScoped
 public class FailureHandler {
@@ -16,6 +17,12 @@ public class FailureHandler {
     public void handler(final RoutingContext ctx) {
         JsonObject error = defaultError(ctx.normalizedPath());
         securityExceptionsHandler(ctx.failure(), error);
+
+        if (ctx.failure()instanceof HttpException ex) {
+            error.put("status", ex.getStatusCode());
+            error.put("error", ex.getPayload());
+        }
+
         if (StringUtils.isBlank(error.getString("message"))) {
             error.put("message", ctx.failure().getMessage());
         }

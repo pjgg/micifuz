@@ -1,16 +1,14 @@
-package com.micifuz.authn.handlers;
+package com.micifuz.commons.handlers;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 
-import javax.enterprise.context.ApplicationScoped;
-
-import io.quarkus.security.UnauthorizedException;
+import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 
-@ApplicationScoped
-public class CheckBasicAuthHandler {
+public class CheckBasicAuthHandler implements Handler<RoutingContext> {
 
     public static final String CLIENT_ID = "client_id";
     public static final String SECRET = "client_secret";
@@ -18,12 +16,21 @@ public class CheckBasicAuthHandler {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BASIC = "Basic";
 
-    public void execute(RoutingContext ctx) {
+    @Override
+    public void handle(RoutingContext ctx) {
         String[] authValues = getAuthHeader(ctx);
         Session session = ctx.session();
-        session.put(CLIENT_ID, getClientId(authValues));
-        session.put(SECRET, getClientSecret(authValues));
+
+        if (Objects.nonNull(session)) {
+            session.put(CLIENT_ID, getClientId(authValues));
+            session.put(SECRET, getClientSecret(authValues));
+        }
+
         ctx.next();
+    }
+
+    static public CheckBasicAuthHandler create() {
+        return new CheckBasicAuthHandler();
     }
 
     private String getClientId(String[] authorizationHeaderValue) {
@@ -43,6 +50,6 @@ public class CheckBasicAuthHandler {
             return credentials.split(":", 2);
         }
 
-        throw new UnauthorizedException("missing Authorization header");
+        throw new RuntimeException("missing Authorization header");
     }
 }

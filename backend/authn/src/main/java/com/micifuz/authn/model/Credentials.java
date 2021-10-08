@@ -1,8 +1,6 @@
 package com.micifuz.authn.model;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.AccessTokenResponse;
@@ -20,8 +18,7 @@ public record Credentials(
         String userPwd,
         String scope,
         String realm,
-        String authServerUrl,
-        HttpClient httpClient) {
+        String authServerUrl) {
 
     private static final String PWD = "password";
     private static final String GRANT_TYPE = "grant_type";
@@ -38,8 +35,7 @@ public record Credentials(
             String userPwd,
             String scope,
             String realm,
-            String authServerUrl,
-            HttpClient httpClient) {
+            String authServerUrl) {
 
         this.clientId = clientId;
         this.clientSecret = clientSecret;
@@ -47,7 +43,6 @@ public record Credentials(
         this.scope = scope;
         this.realm = realm;
         this.authServerUrl = StringUtils.substringBefore(authServerUrl, "/realms");
-        this.httpClient = httpClient;
         this.audience = audience;
         this.userName = userName;
         this.userPwd = userPwd;
@@ -62,8 +57,7 @@ public record Credentials(
                 request.getFormAttribute(USER_PWD),
                 request.getFormAttribute(SCOPE),
                 serverUrl.substring(serverUrl.lastIndexOf('/') + 1),
-                StringUtils.substringBefore(serverUrl, "/realms"),
-                HttpClients.createDefault());
+                StringUtils.substringBefore(serverUrl, "/realms"));
     }
 
     public AccessTokenResponse createAccessToken() {

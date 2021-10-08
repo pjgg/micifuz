@@ -6,13 +6,10 @@ import java.net.URISyntaxException;
 import java.time.Duration;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Liveness;
-import org.eclipse.microprofile.health.Readiness;
 
 import io.smallrye.health.api.AsyncHealthCheck;
 import io.smallrye.mutiny.Uni;
@@ -20,11 +17,7 @@ import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.ext.web.client.WebClient;
 import io.vertx.mutiny.ext.web.client.predicate.ResponsePredicate;
 
-@Readiness
-@Liveness
-@ApplicationScoped
-public class HealthChecks implements AsyncHealthCheck {
-
+public abstract class HealthCheck implements AsyncHealthCheck {
     private static final int RETRIES = 3;
     private static final int TIMEOUT = 30;
 
@@ -35,7 +28,7 @@ public class HealthChecks implements AsyncHealthCheck {
     @Inject
     Vertx vertx;
 
-    private WebClient httpClient;
+    protected WebClient httpClient;
 
     @PostConstruct
     void initialize() throws URISyntaxException {
@@ -44,13 +37,12 @@ public class HealthChecks implements AsyncHealthCheck {
         keycloakUrl = String.format("%s://%s:%d", serverUri.getScheme(), serverUri.getHost(), serverUri.getPort());
     }
 
-    @Override
-    public Uni<HealthCheckResponse> call() {
+    protected Uni<HealthCheckResponse> isUp(String name) {
         try {
             return httpClient.getAbs(keycloakUrl)
                     .expect(ResponsePredicate.status(HttpURLConnection.HTTP_OK))
                     .send()
-                    .map(resp -> HealthCheckResponse.up("Keycloak Up!"))
+                    .map(resp -> HealthCheckResponse.builder().name(name).up().build())
                     .ifNoItem().after(Duration.ofSeconds(TIMEOUT)).fail()
                     .onFailure().retry().atMost(RETRIES);
 
@@ -58,4 +50,6 @@ public class HealthChecks implements AsyncHealthCheck {
             return Uni.createFrom().item(HealthCheckResponse.down(e.getMessage()));
         }
     }
+
+    public abstract Uni<HealthCheckResponse> call();
 }
