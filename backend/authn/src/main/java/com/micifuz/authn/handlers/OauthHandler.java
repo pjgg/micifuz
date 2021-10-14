@@ -1,7 +1,7 @@
 package com.micifuz.authn.handlers;
 
-import static com.micifuz.commons.handlers.CheckBasicAuthHandler.CLIENT_ID;
-import static com.micifuz.commons.handlers.CheckBasicAuthHandler.SECRET;
+import static com.micifuz.commons.handlers.impl.CheckBasicAuthHandlerImpl.CLIENT_ID;
+import static com.micifuz.commons.handlers.impl.CheckBasicAuthHandlerImpl.SECRET;
 
 import javax.enterprise.context.ApplicationScoped;
 

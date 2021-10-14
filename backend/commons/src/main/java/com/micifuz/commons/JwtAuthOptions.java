@@ -28,22 +28,22 @@ public class JwtAuthOptions {
             this.jwtOpt = new JWTOptions().setAlgorithm("RS256");
         }
 
-        public JwtAuthOptions.Builder withJWTOptions(JWTOptions jwtOpt) {
+        public Builder withJWTOptions(JWTOptions jwtOpt) {
             this.jwtOpt = jwtOpt;
             return this;
         }
 
-        public JwtAuthOptions.Builder withScopeDelimiter(String scopeDelimiter) {
+        public Builder withScopeDelimiter(String scopeDelimiter) {
             this.scopeDelimiter = scopeDelimiter;
             return this;
         }
 
-        public JwtAuthOptions.Builder withExpectedScopes(List<String> expectedScopes) {
+        public Builder withExpectedScopes(List<String> expectedScopes) {
             this.expectedScopes = expectedScopes;
             return this;
         }
 
-        public JwtAuthOptions.Builder withExpectedScope(String expectedScope) {
+        public Builder withExpectedScope(String expectedScope) {
             this.expectedScopes.add(expectedScope);
             return this;
         }

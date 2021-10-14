@@ -209,9 +209,9 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <!--                    <annotationProcessors>-->
-                    <!--                        <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>-->
-                    <!--                    </annotationProcessors>-->
+                    <annotationProcessors>
+                        <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
             <plugin>

@@ -20,8 +20,8 @@ import com.micifuz.commons.JwtAuthOptions;
 import com.micifuz.commons.RouteHelper;
 import com.micifuz.commons.handlers.CheckBasicAuthHandler;
 import com.micifuz.commons.handlers.MustContainsRoles;
-import com.micifuz.commons.handlers.Redirections;
 import com.micifuz.commons.handlers.RequiresAuthorizationHeader;
+import com.micifuz.commons.reponses.Redirections;
 
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
