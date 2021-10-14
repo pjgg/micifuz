@@ -2,6 +2,37 @@
   "realm": "micifuz",
   "enabled": true,
   "sslRequired": "none",
+  "defaultRoles": [
+    "admin",
+    "offline_access",
+    "uma_authorization"
+  ],
+  "scopeMappings": [
+    {
+      "clientScope": "offline_access",
+      "roles": [
+        "offline_access"
+      ]
+    },
+    {
+      "clientScope": "petshop",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "clientScope": "vets",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "clientScope": "shelters",
+      "roles": [
+        "admin"
+      ]
+    }
+  ],
   "roles": {
     "realm": [
       {
@@ -11,16 +42,11 @@
         "name": "admin-role"
       },
       {
-        "name": "user-petshop"
-      },
-      {
-        "name": "user-vets"
-      },
-      {
-        "name": "user-shelters"
+        "name": "admin",
+        "clientRole": true
       }
     ]
-  },
+    },
   "users": [
     {
       "username": "Pablo",
@@ -34,25 +60,79 @@
       "realmRoles": [
         "user-role", "user-petshop"
       ]
+    },
+    {
+      "username": "David",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "David"
+        }
+      ],
+      "realmRoles": [
+        "user-role", "user-vets"
+      ]
+    },
+    {
+      "username": "Sandra",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Sandra"
+        }
+      ],
+      "realmRoles": [
+        "user-role", "user-shelters"
+      ]
     }
   ],
   "clients": [
     {
       "clientId": "petshop-client-id",
+      "name": "petshop-client-id",
       "enabled": true,
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
       "serviceAccountsEnabled": true,
+      "attributes": {
+        "example": "test"
+      },
       "clientAuthenticatorType": "client-secret",
       "secret": "topSecret",
       "redirectUris": [
         "*"
-      ]
+      ],
+      "defaultRoles": [
+        "admin"
+      ],
+      "defaultClientScopes": [
+        "admin"
+      ],
+      "protocolMappers": [
+        {
+          "name": "add-roles-to-claim",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "optionalClientScopes": []
     },
     {
       "clientId": "vets-client-id",
+      "name": "vets-client-id",
       "enabled": true,
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
@@ -63,10 +143,34 @@
       "secret": "topSecret",
       "redirectUris": [
         "*"
-      ]
+      ],
+      "defaultRoles": [
+        "admin"
+      ],
+      "defaultClientScopes": [
+        "admin"
+      ],
+      "protocolMappers": [
+        {
+          "name": "add-roles-to-claim",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "optionalClientScopes": []
     },
     {
       "clientId": "shelters-client-id",
+      "name": "shelters-client-id",
       "enabled": true,
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
@@ -75,9 +179,46 @@
       "serviceAccountsEnabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "topSecret",
+      "defaultRoles": [
+        "admin"
+      ],
+      "defaultClientScopes": [
+        "admin"
+      ],
       "redirectUris": [
         "*"
-      ]
+      ],
+      "protocolMappers": [
+        {
+          "name": "add-roles-to-claim",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "optionalClientScopes": []
+    }
+  ],
+  "scopeMappings": [
+    {
+      "client": "petshop-client-id",
+      "roles": ["admin"]
+    },
+    {
+      "client": "vets-client-id",
+      "roles": ["admin"]
+    },
+    {
+      "client": "shelters-client-id",
+      "roles": ["admin"]
     }
   ]
 }
