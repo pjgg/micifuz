@@ -1,7 +1,7 @@
 package com.micifuz.authn;
 
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_FILE_NAME_KEY;
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAME_KEY;
+import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAMES;
+import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_PATH;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -27,8 +27,8 @@ import io.restassured.specification.RequestSpecification;
 
 @QuarkusTest
 @QuarkusTestResource(value = Keycloak15TestContainer.class, initArgs = {
-        @ResourceArg(value = "keycloak-example-realm.json", name = PARAM_REALM_FILE_NAME_KEY),
-        @ResourceArg(value = "micifuz", name = PARAM_REALM_NAME_KEY)
+        @ResourceArg(value = "/realms", name = PARAM_REALM_PATH),
+        @ResourceArg(value = "petshop, vets, shelters, master", name = PARAM_REALM_NAMES)
 })
 public class UserHandlerTest {
 
@@ -150,18 +150,18 @@ public class UserHandlerTest {
     public void invalidToken() {
         givenAnAccessToken("invalid");
         whenMakeRequestTo("/internal/user/" + PETSHOP_USER_NAME);
-        thenStatusCodeIs(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        thenStatusCodeIs(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     public void noTokenProvided() {
         givenAnAccessToken("Bearer ");
         whenMakeRequestTo("/internal/user/" + PETSHOP_USER_NAME);
-        thenStatusCodeIs(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        thenStatusCodeIs(HttpStatus.SC_UNAUTHORIZED);
 
         givenAnAccessToken("");
         whenMakeRequestTo("/internal/user/" + PETSHOP_USER_NAME);
-        thenStatusCodeIs(HttpStatus.SC_UNAUTHORIZED);
+        thenStatusCodeIs(HttpStatus.SC_BAD_REQUEST);
 
         given()
                 .when()

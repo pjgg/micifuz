@@ -1,6 +1,18 @@
 # Micifuz
 
-Micifuz aims to be a showroom for vert.x projects. 
+Micifuz aims to be a showroom for vert.x projects.
+
+<a href="https://github.com/bytesandmonkeys/micifuz/actions/workflows/daily.yaml" alt="Build Status">
+        <img src="https://github.com/bytesandmonkeys/micifuz/actions/workflows/daily.yaml/badge.svg"></a>
+
+<a href="https://github.com/bytesandmonkeys/micifuz/graphs/contributors" alt="Contributors">
+<img src="https://img.shields.io/github/contributors/bytesandmonkeys/micifuz"/></a>
+
+<a href="https://github.com/bytesandmonkeys/micifuz" alt="Top Language">
+        <img src="https://img.shields.io/github/languages/top/bytesandmonkeys/micifuz"></a>
+
+<a href="https://github.com/bytesandmonkeys/micifuz" alt="Coverage">
+        <img src=".github/badges/jacoco.svg"></a>
 
 ## Code style
 
@@ -111,24 +123,56 @@ This module is just a Keycloak facade. Keycloak gives you a full authentication/
 In theory you should not need a facade, because the standard solution is good enough, but sometimes you need to add some 
 extra synchronization or you need to migrate some existing auth provider to the new one so well this is just an example. 
 
+The current solution is an example of a multi-tenant application, with four realms:
+
+- Master: store and manage internal admin users, as our default `admin`
+- Petshop: store and manage petshop users
+- Vets: store and manage vets users
+- Shelters: store and manage shelters users
+
+Note: each realm will have its own pub/private key in order to sign off the JWT tokens
+
+By default, each user will be created with two default roles `user-role` and `user-{REAL_NAME}`. These roles could be used in order to 
+grant a user access to some services. 
+
 ### Launch by hand
 
 1. Environment (Keycloak) 
-`docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 -e KEYCLOAK_IMPORT=/tmp/example-realm.json -v /~/Documents/workspace/micifuz/backend/authn/src/test/resources/keycloak-example-realm.json:/tmp/example-realm.json quay.io/keycloak/keycloak:15.0.2`
 
-Note that we are pointing to the following keycloak [config file](./backend/authn/src/main/resources/keycloak-example-realm.json)
+``` shell
+docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080  
+-e JAVA_OPTS_APPEND="-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir 
+-Dkeycloak.migration.dir=/tmp/keycloak -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+-v /~/Documents/workspace/vertx-micifuz/micifuz/backend/authn/src/test/resources/realms:/tmp/keycloak 
+quay.io/keycloak/keycloak:15.0.2
+```
+
+Note that we are pointing to the following keycloak [config folder](./backend/authn/src/main/resources/realms)
 
 2. Service
+
 DevMode: `mvn quarkus:dev -pl backend/authn`
+
 Debug: `mvn quarkus:dev -pl backend/authn -Ddebug`
 
-Default users: 
-Common user/password: `Pablo/Pablo`
-ClientId: `petshop-client-id`
-Secret: `topSecret`
+3. Default users: 
+
+Petshop user/password: `Pablo/Pablo`
+Vets user/password: `David/David`
+Shelters user/password: `Sandra/Sandra`
+
+petshop ClientId: `petshop-client-id`
+
+vets ClientId: `vets-client-id`
+
+shelters ClientId: `shelters-client-id`
+
+Secret (for all clientIds): `topSecret`
 
 ### Useful links
 
 Dev UI: `http://localhost:8080/dev/`
+
 Swagger UI: `http://localhost:8080/swagger-ui/#/`
+
 Keycloak dashboard: `http://localhost:8180/auth/admin/`  (admin/admin)

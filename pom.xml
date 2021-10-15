@@ -29,7 +29,12 @@
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
+        <vertx-mutiny-generator.version>2.14.2</vertx-mutiny-generator.version>
         <testcontainers.version>1.16.0</testcontainers.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <!-- Code Coverage Properties-->
+        <jacoco.agent.argLine/>
+        <exclude.tests.with.tags>quarkus-cli</exclude.tests.with.tags>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -59,6 +64,11 @@
                 <artifactId>test-resources</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.smallrye.reactive</groupId>
+                <artifactId>vertx-mutiny-generator</artifactId>
+                <version>${vertx-mutiny-generator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -110,6 +120,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin.version}</version>
@@ -201,6 +216,36 @@
                         <keycloak.15.image>quay.io/keycloak/keycloak:15.0.2</keycloak.15.image>
                     </systemPropertyVariables>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>4.5-jdk8</version>
+                <configuration>
+                    <systemProperties>
+                        <java.util.logging.SimpleFormatter.format>%4$s: %3$s - %5$s %6$s%n</java.util.logging.SimpleFormatter.format>
+                        <mvel2.disable.jit>true</mvel2.disable.jit>
+                    </systemProperties>
+                </configuration>
+                <executions>
+                    <!-- Run the annotation processor on java sources and generate the API -->
+                    <execution>
+                        <id>generate-api</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <sourceDirectory>${project.build.directory}/sources/java</sourceDirectory>
+                            <processors>
+                                <processor>io.vertx.codegen.CodeGenProcessor</processor>
+                            </processors>
+                            <optionMap>
+                                <codegen.generators>mutiny</codegen.generators>
+                            </optionMap>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -302,6 +347,27 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <argLine>${jacoco.agent.argLine}</argLine>
+                            <excludedGroups>${exclude.tests.with.tags}</excludedGroups>
+                            <includes>
+                                <include>${include.tests}</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <repositories>
@@ -314,6 +380,35 @@
         </repository>
     </repositories>
     <profiles>
+        <profile>
+            <id>coverage</id>
+            <properties>
+                <!--suppress UnresolvedMavenProperty to ignore warnings in idea-->
+                <jacoco.agent.argLine>${jacoco.generated.agent.argLine}</jacoco.agent.argLine>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>com.micifuz.test*</include>
+                                    </includes>
+                                    <propertyName>jacoco.generated.agent.argLine</propertyName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>authn</id>
             <activation>

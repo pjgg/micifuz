@@ -21,7 +21,7 @@ public abstract class HealthCheck implements AsyncHealthCheck {
     private static final int RETRIES = 3;
     private static final int TIMEOUT = 30;
 
-    @ConfigProperty(name = "quarkus.oidc.auth-server-url")
+    @ConfigProperty(name = "auth-server-url")
     String oauthServerUrl;
     String keycloakUrl;
 

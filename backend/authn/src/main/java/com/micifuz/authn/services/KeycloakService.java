@@ -3,22 +3,21 @@ package com.micifuz.authn.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import com.micifuz.authn.model.Users;
+import com.micifuz.authn.utils.RealmUtils;
 
 import io.vertx.ext.web.handler.HttpException;
 
@@ -26,28 +25,17 @@ import io.vertx.ext.web.handler.HttpException;
 public class KeycloakService {
 
     private static final int RANDOM_PASSWORD_LENGTH = 7;
-    private static final List<String> PETSHOP_DEFAULT_ROLES = List.of("user-role", "user-petshop");
-    private static final List<String> VETS_DEFAULT_ROLES = List.of("user-role", "user-vets");
-    private static final List<String> SHELTERS_DEFAULT_ROLES = List.of("user-role", "user-shelters");
-    private static final Map<String, List<String>> DEFAULT_ROLES = Map.of("petshop-client-id", PETSHOP_DEFAULT_ROLES,
-            "vets-client-id", VETS_DEFAULT_ROLES,
-            "shelters-client-id", SHELTERS_DEFAULT_ROLES);
-
-    @ConfigProperty(name = "quarkus.oidc.auth-server-url")
-    private String oauthServerUrl;
 
     @Inject
+    @Named("admin")
     private Keycloak keycloakCli;
 
-    private String realm;
-
-    @PostConstruct
-    void initialize() {
-        this.realm = oauthServerUrl.substring(oauthServerUrl.lastIndexOf('/') + 1);
-    }
+    @Inject
+    private RealmUtils realmUtils;
 
     public String createUser(Users u, String clientId) {
         var user = toKeycloakUser(u, Arrays.asList(defaultCredentials()), false, true);
+        var realm = realmUtils.getRealmByClientId(clientId);
         var response = keycloakCli.realm(realm).users().create(user);
         if (response.getStatus() != HttpStatus.SC_CREATED) {
             throw new HttpException(response.getStatus(), "Auth user not saved");
@@ -56,13 +44,14 @@ public class KeycloakService {
         var userId = getUserId(keycloakCli, realm, u.userName());
         var existingRoles = getExistingRoles(keycloakCli, realm);
         removeRoles(keycloakCli, realm, userId, existingRoles);
-        assignRoles(keycloakCli, realm, userId, DEFAULT_ROLES.get(clientId));
+        assignRoles(keycloakCli, realm, userId, realmUtils.getDefaultClientIdRoles().get(clientId));
 
         return userId;
     }
 
     public Users findUserByUserName(final String clientId, final String userName) {
-        var roles = DEFAULT_ROLES.get(clientId);
+        var roles = realmUtils.getDefaultClientIdRoles().get(clientId);
+        var realm = realmUtils.getRealmByClientId(clientId);
         return keycloakCli.realm(realm).users().search(userName.toLowerCase(), true)
                 .stream()
                 .findFirst()
