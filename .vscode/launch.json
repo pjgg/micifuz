@@ -17,15 +17,15 @@
             "name": "Petshop Runner",
             "request": "launch",
             "mainClass": "com.micifuz.commons.Runner",
-            "projectName": "petshop",
+            "projectName": "micifuz-petshop",
             "args": "com.micifuz.petshop.PetShopMainVerticle"
         },
         {
             "type": "java",
-            "name": "Petshop Runner",
+            "name": "Shelters Runner",
             "request": "launch",
             "mainClass": "com.micifuz.commons.Runner",
-            "projectName": "shelters",
+            "projectName": "micifuz-shelters",
             "args": "com.micifuz.shelters.SheltersMainVerticle"
         },
         {
@@ -33,7 +33,7 @@
             "name": "Vets Runner",
             "request": "launch",
             "mainClass": "com.micifuz.commons.Runner",
-            "projectName": "vets",
+            "projectName": "micifuz-vets",
             "args": "com.micifuz.vets.VetsMainVerticle"
         }
         
