@@ -18,8 +18,55 @@ servers:
 tags:
   - name: Authentication
     description: Oauth credentials and password grant type flow
+  - name: Users
+    description: User manager
 
 paths:
+  /internal/user:
+    post:
+      tags:
+        - Users
+      summary: Create auth user
+      description: create auth users for a given service (thanks to your oauth clientId, that is required though your bearer token)
+      operationId: createUser
+      security:
+        - oAuth2ClientCredentials: []
+      requestBody:
+        description: new user details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        responses:
+        '201':
+          description: successfull add person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResponse'
+  /internal/user/{username}:
+    get:
+      tags:
+        - Users
+      summary: retrieve auth user
+      description: retrieve auth user
+      operationId: retrieveUser
+      security:
+        - oAuth2ClientCredentials: [ ]
+      parameters:
+        - name: username
+          in: path
+          description: user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: retrieved user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /internal/oauth/token:
     post:
       tags:
@@ -28,7 +75,7 @@ paths:
       description: internal method don't expose directly this API to an external application. The secret should not travel abroad your company.You should talk to this API through a backend for front end and return the final accessToken to the end user.
       operationId: createAccessToken
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       requestBody:
         description: user info to be filled
         content:
@@ -60,6 +107,23 @@ paths:
 
 components:
   schemas:
+    IdResponse:
+      type: object
+      properties:
+        ID:
+          type: string
+    User:
+      type: object
+      required: ["userName", "firstName", "lastName", "email"]
+      properties:
+        userName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
     credentials:
       type: object
       required: ["grant_type" ]
@@ -105,7 +169,4 @@ components:
       flows:
         password:
           tokenUrl: http://localhost:8080/internal/oauth/token
-          scopes:
-            read: Grant read-only access to all your data except for the account and user info
-            write: Grant write-only access to all your data except for the account and user info
-            profile: Grant read-only access to the account and user info only
+          scopes: {}

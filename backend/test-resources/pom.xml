@@ -19,5 +19,11 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-codegen</artifactId>
+            <scope>provided</scope>
+            <classifier>processor</classifier>
+        </dependency>
     </dependencies>
 </project>

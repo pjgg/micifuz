@@ -84,16 +84,12 @@ public class RouteHelper {
     }
 
     public CompletionStage<Route> addToRouter(Vertx vertx, Router router) {
-
+        var route = defaultRoute(router, method, path);
         if (jwtAuthOptions != null) {
-            return jwtAuthOptions.getPublicKeys().toCompletionStage()
-                    .thenApply(pubKeys -> createJWTAuthHandler(vertx, jwtAuthOptions, pubKeys))
-                    .thenApply(jwtAuthHandler -> defaultRoute(router, method, path).handler(jwtAuthHandler))
-                    .thenApply(route -> addHandlerToRoute(route))
-                    .thenApply(route -> route.failureHandler(failureHandler));
+            var jwtAuthHandler = createJWTAuthHandler(vertx, jwtAuthOptions, jwtAuthOptions.getPublicKeys());
+            route = route.handler(jwtAuthHandler);
         }
 
-        var route = defaultRoute(router, method, path);
         addBodyHandler(route, method);
         addHandlerToRoute(route).failureHandler(failureHandler);
         return Future.succeededFuture(route).toCompletionStage();

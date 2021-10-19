@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.JWTOptions;
 import io.vertx.ext.web.client.HttpResponse;
@@ -15,35 +14,35 @@ import io.vertx.ext.web.codec.BodyCodec;
 public class JwtAuthOptions {
 
     public static class Builder {
-        private String jksPath;
+        private List<String> jksPath;
         private JWTOptions jwtOpt;
         private String scopeDelimiter;
         private List<String> expectedScopes = new ArrayList<>();
         private WebClient webClient;
 
-        public Builder(String jksPath, WebClient webClient) {
+        public Builder(List<String> jksPath, WebClient webClient) {
             this.jksPath = jksPath;
             this.webClient = webClient;
             this.scopeDelimiter = " ";
             this.jwtOpt = new JWTOptions().setAlgorithm("RS256");
         }
 
-        public JwtAuthOptions.Builder withJWTOptions(JWTOptions jwtOpt) {
+        public Builder withJWTOptions(JWTOptions jwtOpt) {
             this.jwtOpt = jwtOpt;
             return this;
         }
 
-        public JwtAuthOptions.Builder withScopeDelimiter(String scopeDelimiter) {
+        public Builder withScopeDelimiter(String scopeDelimiter) {
             this.scopeDelimiter = scopeDelimiter;
             return this;
         }
 
-        public JwtAuthOptions.Builder withExpectedScopes(List<String> expectedScopes) {
+        public Builder withExpectedScopes(List<String> expectedScopes) {
             this.expectedScopes = expectedScopes;
             return this;
         }
 
-        public JwtAuthOptions.Builder withExpectedScope(String expectedScope) {
+        public Builder withExpectedScope(String expectedScope) {
             this.expectedScopes.add(expectedScope);
             return this;
         }
@@ -54,10 +53,21 @@ public class JwtAuthOptions {
                     .collect(Collectors.toList());
         }
 
-        private Future<List<Object>> requestPublicKeys() {
-            return webClient.getAbs(jksPath).as(BodyCodec.jsonObject())
-                    .send().map(HttpResponse::body)
-                    .map(this::keysToList);
+        private List<Object> requestPublicKeys() {
+            List<Object> jksResp = new ArrayList<>();
+            try {
+                for (var jks : jksPath) {
+                    jksResp.addAll(webClient.getAbs(jks).as(BodyCodec.jsonObject())
+                            .send().map(HttpResponse::body)
+                            .map(this::keysToList)
+                            .toCompletionStage().toCompletableFuture().get());
+                }
+
+            } catch (Exception ex) {
+                throw new RuntimeException("JWKS retrieve process fails: " + ex.getMessage());
+            }
+
+            return jksResp;
         }
 
         public JwtAuthOptions build() {
@@ -73,16 +83,16 @@ public class JwtAuthOptions {
     private JwtAuthOptions() {
     }
 
-    private Future<List<Object>> publicKeys;
+    private List<Object> publicKeys;
     private JWTOptions jwtOpt;
     private String scopeDelimiter;
     private List<String> expectedScopes;
 
-    public Future<List<Object>> getPublicKeys() {
+    public List<Object> getPublicKeys() {
         return publicKeys;
     }
 
-    public void setPublicKeys(Future<List<Object>> publicKeys) {
+    public void setPublicKeys(List<Object> publicKeys) {
         this.publicKeys = publicKeys;
     }
 
