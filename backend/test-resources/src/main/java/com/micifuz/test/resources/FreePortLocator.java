@@ -1,4 +1,4 @@
-package com.micifuz.tests.resources;
+package com.micifuz.test.resources;
 
 import java.io.IOException;
 import java.net.ServerSocket;

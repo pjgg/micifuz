@@ -1,13 +1,13 @@
-package com.micifuz.authn;
+package com.micifuz.test.authn;
 
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAMES;
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_PATH;
+import static com.micifuz.test.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAMES;
+import static com.micifuz.test.resources.containers.Keycloak15TestContainer.PARAM_REALM_PATH;
 import static io.restassured.RestAssured.given;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import com.micifuz.tests.resources.containers.Keycloak15TestContainer;
+import com.micifuz.test.resources.containers.Keycloak15TestContainer;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.ResourceArg;

@@ -1,4 +1,4 @@
-package com.micifuz.shelters;
+package com.micifuz.test.petshop;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.micifuz.commons.Runner;
-import com.micifuz.tests.resources.FreePortLocator;
+import com.micifuz.petshop.PetShopMainVerticle;
+import com.micifuz.test.resources.FreePortLocator;
 
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
@@ -26,13 +27,13 @@ import io.vertx.junit5.VertxTestContext;
 
 @ExtendWith(VertxExtension.class)
 public class SimpleTest {
-    final static String SHELTERS_HOST = "localhost";
+    final static String PETSHOP_HOST = "localhost";
     static int servicePort;
     static String deploymentId;
 
     @BeforeAll
     static void beforeAll(Vertx vertx, VertxTestContext testContext) throws IOException {
-        ServiceStart(vertx, testContext);
+        serviceStart(vertx, testContext);
     }
 
     @AfterAll
@@ -47,7 +48,7 @@ public class SimpleTest {
                 .when().get("/hello")
                 .then()
                 .statusCode(200)
-                .body("hello", is("world: shelters"));
+                .body("hello", is("world: petShop"));
     }
 
     @Test
@@ -55,7 +56,7 @@ public class SimpleTest {
     void should_healthCheck_up(Vertx vertx, VertxTestContext testContext) {
         HttpClient client = vertx.createHttpClient();
 
-        client.request(HttpMethod.GET, servicePort, SHELTERS_HOST, "/health").compose(req -> req.send()
+        client.request(HttpMethod.GET, servicePort, PETSHOP_HOST, "/health").compose(req -> req.send()
                 .onComplete(testContext.succeeding(httpResp -> testContext.verify(() -> {
                     assertThat(httpResp.statusCode(), is(200));
                     testContext.completeNow();
@@ -69,8 +70,8 @@ public class SimpleTest {
                 .put("path", "simpleTest-config.yaml");
     }
 
-    private static void ServiceStart(Vertx vertx, VertxTestContext testContext) throws IOException {
-        Runner.start(vertx, new DeploymentOptions().setConfig(getDefaultAppConfig()), SheltersMainVerticle.class.getName())
+    private static void serviceStart(Vertx vertx, VertxTestContext testContext) throws IOException {
+        Runner.start(vertx, new DeploymentOptions().setConfig(getDefaultAppConfig()), PetShopMainVerticle.class.getName())
                 .onFailure(Throwable::printStackTrace)
                 .onComplete(res -> {
                     deploymentId = res.result();
