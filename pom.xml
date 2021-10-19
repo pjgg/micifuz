@@ -22,7 +22,7 @@
         <src.sort.goal>sort</src.sort.goal>
         <xml.format.goal>xml-format</xml.format.goal>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <include.tests>**/*IT.java</include.tests>
+        <include.tests>**/*Test.java</include.tests>
         <commons-logging.version>1.2</commons-logging.version>
         <quarkus.platform.version>2.3.0.Final</quarkus.platform.version>
         <main.verticle>replaced_in_modules</main.verticle>
@@ -34,7 +34,6 @@
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <!-- Code Coverage Properties-->
         <jacoco.agent.argLine/>
-        <exclude.tests.with.tags>quarkus-cli</exclude.tests.with.tags>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -212,6 +211,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <argLine>${jacoco.agent.argLine}</argLine>
                     <systemPropertyVariables>
                         <keycloak.15.image>quay.io/keycloak/keycloak:15.0.2</keycloak.15.image>
                     </systemPropertyVariables>
@@ -346,27 +346,6 @@
                         <version>${checkstyle.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <argLine>${jacoco.agent.argLine}</argLine>
-                            <excludedGroups>${exclude.tests.with.tags}</excludedGroups>
-                            <includes>
-                                <include>${include.tests}</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <trimStackTrace>false</trimStackTrace>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,4 +1,4 @@
-package com.micifuz.tests.resources.containers;
+package com.micifuz.test.resources.containers;
 
 import java.time.Duration;
 import java.util.HashMap;

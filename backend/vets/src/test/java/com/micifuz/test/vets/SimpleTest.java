@@ -1,4 +1,4 @@
-package com.micifuz.vets;
+package com.micifuz.test.vets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.micifuz.commons.Runner;
-import com.micifuz.tests.resources.FreePortLocator;
+import com.micifuz.test.resources.FreePortLocator;
+import com.micifuz.vets.VetsMainVerticle;
 
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;

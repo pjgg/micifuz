@@ -1,7 +1,7 @@
-package com.micifuz.authn;
+package com.micifuz.test.authn;
 
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAMES;
-import static com.micifuz.tests.resources.containers.Keycloak15TestContainer.PARAM_REALM_PATH;
+import static com.micifuz.test.resources.containers.Keycloak15TestContainer.PARAM_REALM_NAMES;
+import static com.micifuz.test.resources.containers.Keycloak15TestContainer.PARAM_REALM_PATH;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.micifuz.authn.model.Users;
-import com.micifuz.tests.resources.containers.Keycloak15TestContainer;
+import com.micifuz.test.resources.containers.Keycloak15TestContainer;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.ResourceArg;

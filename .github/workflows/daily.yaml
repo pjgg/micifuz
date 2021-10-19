@@ -21,7 +21,7 @@ jobs:
           java-version: ${{ matrix.java }}
           check-latest: true
       - name: Build the code
-        run: mvn -fae -V -B clean verify -Pcoverage,authn,petshop,shelters,vets
+        run: mvn -fae -V -B clean test -Pcoverage,authn,petshop,shelters,vets
       - name: Generate Jacoco Report
         run: |
           cd coverage-report
