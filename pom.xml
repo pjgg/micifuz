@@ -30,7 +30,7 @@
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
         <vertx-mutiny-generator.version>2.14.2</vertx-mutiny-generator.version>
-        <testcontainers.version>1.16.0</testcontainers.version>
+        <testcontainers.version>1.16.1</testcontainers.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <!-- Code Coverage Properties-->
         <jacoco.agent.argLine/>
