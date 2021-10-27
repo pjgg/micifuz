@@ -60,12 +60,12 @@ jobs:
           zip -R build-micifuz-modules${{ matrix.java }}.zip '*-reports/*'
       - name: Archive artifacts
         if: failure()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: ci-artifacts
           path: build-micifuz-modules${{ matrix.java }}.zip
       - name: Archive Coverage Report
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: ci-coverage
           path: coverage-report/target/site/jacoco
