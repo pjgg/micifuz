@@ -378,7 +378,7 @@
                                 </goals>
                                 <configuration>
                                     <includes>
-                                        <include>com.micifuz.test*</include>
+                                        <include>com.micifuz.*</include>
                                     </includes>
                                     <propertyName>jacoco.generated.agent.argLine</propertyName>
                                 </configuration>

@@ -13,7 +13,7 @@ for j in '..' '../backend'; do
 done
 
 ##delete classes from backend
-#rm -r target/classes/com/micifuz
+rm -r target/classes/com/micifuz/test
 
 #needed to make sure the script always succeeds
 echo "complete"

@@ -49,7 +49,9 @@ jobs:
           for module in $MODULES
           do
               if [[ "${{ steps.files.outputs.all }}" =~ ("$module") ]] ; then
-                  CHANGED=$(echo $CHANGED" "$module)
+                  if [[ "coverage-report" -ne "$module" ]] ; then
+                    CHANGED=$(echo $CHANGED" "$module)
+                  fi
               fi
           done
           MODULES_ARG="${CHANGED// /,}"
