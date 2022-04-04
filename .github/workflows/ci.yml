@@ -11,7 +11,7 @@ jobs:
         java: [ 11 ]
     steps:
       - name: Cache bazel
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3.0.1
         env:
           cache-name: bazel-cache
         with:
@@ -41,7 +41,7 @@ jobs:
         java: [ 11 ]
     steps:
       - name: Cache bazel
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3.0.1
         env:
           cache-name: bazel-cache
         with:
